@@ -3,7 +3,7 @@ set echo on
 set verify on
 set pagesize 66
 set linesize 100
-spool c:\cprg250\module1\lab0output.txt
+spool C:\Coding\Database\Module1\spool.txt
 rem Just Lee Database
 
 rem show customers and books they have ordered

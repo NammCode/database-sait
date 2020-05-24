@@ -1,0 +1,88 @@
+SQL> 
+SQL> -- Question 1
+SQL> SELECT firstname , lastname
+  2  FROM customers
+  3  WHERE state ='CA'
+  4  ORDER BY lastname , firstname ASC;
+
+FIRSTNAME  LASTNAME                                                                                                                 
+---------- ----------                                                                                                               
+MICHELL    DAUM                                                                                                                     
+JORGE      PEREZ                                                                                                                    
+RYAN       THOMPSON                                                                                                                 
+
+SQL> 
+SQL> -- Question 2
+SQL> SELECT title , category
+  2  FROM books
+  3  WHERE(retail-cost) < 15
+  4  ORDER BY category , title;
+
+TITLE                          CATEGORY                                                                                             
+------------------------------ ------------                                                                                         
+BIG BEAR AND LITTLE DOVE       CHILDREN                                                                                             
+HANDCRANKED COMPUTERS          COMPUTER                                                                                             
+COOKING WITH MUSHROOMS         COOKING                                                                                              
+THE WOK WAY TO COOK            COOKING                                                                                              
+REVENGE OF MICKEY              FAMILY LIFE                                                                                          
+BODYBUILD IN 10 MINUTES A DAY  FITNESS                                                                                              
+HOW TO GET FASTER PIZZA        SELF HELP                                                                                            
+
+7 rows selected.
+
+SQL> 
+SQL> -- Question 3
+SQL> SELECT title
+  2  FROM books
+  3  WHERE (discount > 3 AND category = 'COMPUTER');
+
+TITLE                                                                                                                               
+------------------------------                                                                                                      
+HOLY GRAIL OF ORACLE                                                                                                                
+
+SQL> 
+SQL> -- Question 4
+SQL> SELECT firstname, lastname, region
+  2  FROM customers
+  3  WHERE (region != 'N' AND region != 'NE' AND region != 'NW' )
+  4  ORDER BY lastname DESC, firstname ASC;
+
+FIRSTNAME  LASTNAME   RE                                                                                                            
+---------- ---------- --                                                                                                            
+RYAN       THOMPSON   W                                                                                                             
+LEILA      SMITH      SE                                                                                                            
+STEVE      SCHELL     SE                                                                                                            
+JORGE      PEREZ      W                                                                                                             
+NICHOLAS   NGUYEN     SE                                                                                                            
+BONITA     MORALES    SE                                                                                                            
+GREG       MONTIASA   SE                                                                                                            
+JAKE       LUCAS      SE                                                                                                            
+TAMMY      GIANA      SW                                                                                                            
+MICHELL    DAUM       W                                                                                                             
+
+10 rows selected.
+
+SQL> 
+SQL> -- Question 5
+SQL> SELECT firstname , lastname , region
+  2  FROM customers
+  3  WHERE region NOT IN ('N','NW','NE')
+  4  ORDER BY lastname DESC , firstname ASC;
+
+FIRSTNAME  LASTNAME   RE                                                                                                            
+---------- ---------- --                                                                                                            
+RYAN       THOMPSON   W                                                                                                             
+LEILA      SMITH      SE                                                                                                            
+STEVE      SCHELL     SE                                                                                                            
+JORGE      PEREZ      W                                                                                                             
+NICHOLAS   NGUYEN     SE                                                                                                            
+BONITA     MORALES    SE                                                                                                            
+GREG       MONTIASA   SE                                                                                                            
+JAKE       LUCAS      SE                                                                                                            
+TAMMY      GIANA      SW                                                                                                            
+MICHELL    DAUM       W                                                                                                             
+
+10 rows selected.
+
+SQL> 
+SQL> spool off;

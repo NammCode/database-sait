@@ -1,0 +1,6 @@
+alter session set "_ORACLE_SCRIPT"=true; 
+CREATE USER cprg250
+      IDENTIFIED BY password
+      DEFAULT TABLESPACE users
+      QUOTA UNLIMITED ON users;
+GRANT RESOURCE, CONNECT, CREATE VIEW TO cprg250;

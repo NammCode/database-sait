@@ -1,0 +1,178 @@
+SQL> rem Just Lee Database
+SQL> 
+SQL> rem show customers and books they have ordered
+SQL> select firstname, lastname, title
+  2  from customers natural join orders
+  3  	natural join orderitems
+  4  	natural join books
+  5  order by 2,1,3;
+
+FIRSTNAME  LASTNAME   TITLE                                                                         
+---------- ---------- ------------------------------                                                
+KENNETH    FALAH      COOKING WITH MUSHROOMS                                                        
+KENNETH    FALAH      PAINLESS CHILD-REARING                                                        
+TAMMY      GIANA      BIG BEAR AND LITTLE DOVE                                                      
+TAMMY      GIANA      DATABASE IMPLEMENTATION                                                       
+TAMMY      GIANA      E-BUSINESS THE EASY WAY                                                       
+TAMMY      GIANA      HOLY GRAIL OF ORACLE                                                          
+TAMMY      GIANA      REVENGE OF MICKEY                                                             
+CINDY      GIRARD     COOKING WITH MUSHROOMS                                                        
+CINDY      GIRARD     COOKING WITH MUSHROOMS                                                        
+CINDY      GIRARD     REVENGE OF MICKEY                                                             
+KENNETH    JONES      COOKING WITH MUSHROOMS                                                        
+JASMINE    LEE        DATABASE IMPLEMENTATION                                                       
+JAKE       LUCAS      HOW TO MANAGE THE MANAGER                                                     
+JAKE       LUCAS      PAINLESS CHILD-REARING                                                        
+JAKE       LUCAS      PAINLESS CHILD-REARING                                                        
+REESE      MCGOVERN   DATABASE IMPLEMENTATION                                                       
+GREG       MONTIASA   REVENGE OF MICKEY                                                             
+GREG       MONTIASA   SHORTEST POEMS                                                                
+BONITA     MORALES    BODYBUILD IN 10 MINUTES A DAY                                                 
+BONITA     MORALES    COOKING WITH MUSHROOMS                                                        
+BONITA     MORALES    COOKING WITH MUSHROOMS                                                        
+BONITA     MORALES    DATABASE IMPLEMENTATION                                                       
+BONITA     MORALES    DATABASE IMPLEMENTATION                                                       
+BECCA      NELSON     BIG BEAR AND LITTLE DOVE                                                      
+BECCA      NELSON     HANDCRANKED COMPUTERS                                                         
+BECCA      NELSON     PAINLESS CHILD-REARING                                                        
+BECCA      NELSON     REVENGE OF MICKEY                                                             
+THOMAS     PIERSON    COOKING WITH MUSHROOMS                                                        
+STEVE      SCHELL     BIG BEAR AND LITTLE DOVE                                                      
+JENNIFER   SMITH      DATABASE IMPLEMENTATION                                                       
+LEILA      SMITH      E-BUSINESS THE EASY WAY                                                       
+LEILA      SMITH      PAINLESS CHILD-REARING                                                        
+
+32 rows selected.
+
+SQL> rem
+SQL> rem ICCC database
+SQL> rem list of courses and instructors capable of teaching each course
+SQL> select course_title, firstname, surname
+  2  from course join expertise using (course_code)
+  3  	 join faculty using (employee_id)
+  4  order by 1,3,2;
+
+COURSE_TITLE                                       FIRSTNAME                                        
+-------------------------------------------------- ------------------------------                   
+SURNAME                                                                                             
+------------------------------                                                                      
+Calculus I                                         Marcia                                           
+Longley                                                                                             
+                                                                                                    
+Calculus I                                         David                                            
+Reid                                                                                                
+                                                                                                    
+Calculus I                                         Christopher                                      
+Sparks                                                                                              
+                                                                                                    
+Calculus II                                        Marcia                                           
+Longley                                                                                             
+                                                                                                    
+Calculus II                                        David                                            
+Reid                                                                                                
+                                                                                                    
+Calculus II                                        Christopher                                      
+Sparks                                                                                              
+                                                                                                    
+Computer Fundamentals                              William                                          
+Fences                                                                                              
+                                                                                                    
+English Literature                                 Marvin                                           
+Minsky                                                                                              
+                                                                                                    
+English Literature                                 Christopher                                      
+Sparks                                                                                              
+                                                                                                    
+Heat and Thermodynamics                            Marie                                            
+Curie                                                                                               
+                                                                                                    
+Heat and Thermodynamics                            Marcia                                           
+Longley                                                                                             
+                                                                                                    
+Heat and Thermodynamics                            Christopher                                      
+Sparks                                                                                              
+                                                                                                    
+Information Systems I                              Penelope                                         
+Faure                                                                                               
+                                                                                                    
+Information Systems I                              Edward                                           
+MacLeod                                                                                             
+                                                                                                    
+Information Systems II                             Penelope                                         
+Faure                                                                                               
+                                                                                                    
+Intermediate Accounting                            Clifford                                         
+James                                                                                               
+                                                                                                    
+Introduction to Fourth Generation Languages        Penelope                                         
+Faure                                                                                               
+                                                                                                    
+Introductory Accounting                            Clifford                                         
+James                                                                                               
+                                                                                                    
+Introductory Accounting                            Douglas                                          
+Lee                                                                                                 
+                                                                                                    
+Introductory Accounting                            Marvin                                           
+Minsky                                                                                              
+                                                                                                    
+Introductory Programming                           Peter                                            
+
+COURSE_TITLE                                       FIRSTNAME                                        
+-------------------------------------------------- ------------------------------                   
+SURNAME                                                                                             
+------------------------------                                                                      
+Lee                                                                                                 
+                                                                                                    
+Object Oriented Analysis                           Penelope                                         
+Faure                                                                                               
+                                                                                                    
+Object Oriented Analysis                           Joseph                                           
+Ullman                                                                                              
+                                                                                                    
+Technical Systems I                                Penelope                                         
+Faure                                                                                               
+                                                                                                    
+
+24 rows selected.
+
+SQL> 
+SQL> rem
+SQL> rem WGB database
+SQL> rem show customers and their transactions
+SQL> select first_name, surname, account_type, transaction_type "Type", transaction_amount "Amount"
+  2  from wgb_customer join wgb_account using (customer_number)
+  3   join wgb_transaction using (customer_number, account_type)
+  4   order by 2,1,3;
+
+FIRST_NAME           SURNAME                   ACCOUNT_TYPE T     Amount                            
+-------------------- ------------------------- ------------ - ----------                            
+Peter                Chen                                 4 C         60                            
+Peter                Chen                                 4 C         60                            
+Peter                Chen                                 4 C         60                            
+Peter                Chen                                 4 C         60                            
+Peter                Chen                                 5 C       1000                            
+Henri                Poincare                             1 D        115                            
+Henri                Poincare                             1 D     135.28                            
+Henri                Poincare                             1 D         40                            
+Henri                Poincare                             1 C       2000                            
+Henri                Poincare                             1 D    1439.55                            
+Henri                Poincare                             1 C     135.28                            
+Henri                Poincare                             1 D       1100                            
+Henri                Poincare                             2 C         40                            
+Henri                Poincare                             4 C        120                            
+John                 Synge                                1 C         40                            
+John                 Synge                                1 D        226                            
+John                 Synge                                1 D     159.27                            
+John                 Synge                                1 C       1895                            
+John                 Synge                                1 D     425.76                            
+John                 Synge                                2 C         60                            
+John                 Synge                                2 C       1065                            
+John                 Synge                                2 C        .22                            
+John                 Synge                                2 D      12.17                            
+John                 Synge                                2 C         73                            
+John                 Synge                                2 C        565                            
+
+25 rows selected.
+
+SQL> spool off

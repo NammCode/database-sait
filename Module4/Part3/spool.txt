@@ -1,0 +1,367 @@
+SQL> 
+SQL> -- Task 2a
+SQL> SELECT firstname, lastname, o.order#, oi.item#, title, gift
+  2  FROM customers c, orders o, orderitems oi, books b, promotion p
+  3  WHERE c.customer# = o.customer#
+  4  AND o.order# = oi.order#
+  5  AND oi.isbn = b.isbn
+  6  AND b.retail between p.minretail AND p.maxretail
+  7  ORDER BY 2, 1, 3, 4;
+
+FIRSTNAME  LASTNAME       ORDER#      ITEM# TITLE                          GIFT                                                     
+---------- ---------- ---------- ---------- ------------------------------ ---------------                                          
+KENNETH    FALAH            1004          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+KENNETH    FALAH            1015          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+TAMMY      GIANA            1007          1 HOLY GRAIL OF ORACLE           FREE SHIPPING                                            
+TAMMY      GIANA            1007          2 E-BUSINESS THE EASY WAY        BOOK COVER                                               
+TAMMY      GIANA            1007          3 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+TAMMY      GIANA            1007          4 DATABASE IMPLEMENTATION        BOOK COVER                                               
+TAMMY      GIANA            1014          1 REVENGE OF MICKEY              BOOK LABELS                                              
+CINDY      GIRARD           1000          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+CINDY      GIRARD           1009          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+CINDY      GIRARD           1009          2 REVENGE OF MICKEY              BOOK LABELS                                              
+KENNETH    JONES            1020          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+JASMINE    LEE              1013          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+JAKE       LUCAS            1001          1 HOW TO MANAGE THE MANAGER      BOOK COVER                                               
+JAKE       LUCAS            1001          2 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+JAKE       LUCAS            1011          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+REESE      MCGOVERN         1002          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+GREG       MONTIASA         1005          1 SHORTEST POEMS                 BOOK COVER                                               
+GREG       MONTIASA         1019          1 REVENGE OF MICKEY              BOOK LABELS                                              
+BONITA     MORALES          1003          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+BONITA     MORALES          1003          2 BODYBUILD IN 10 MINUTES A DAY  BOOK COVER                                               
+BONITA     MORALES          1003          3 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+BONITA     MORALES          1018          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+BONITA     MORALES          1018          2 DATABASE IMPLEMENTATION        BOOK COVER                                               
+BECCA      NELSON           1012          1 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+BECCA      NELSON           1012          2 HANDCRANKED COMPUTERS          BOOK LABELS                                              
+BECCA      NELSON           1012          3 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+BECCA      NELSON           1012          4 REVENGE OF MICKEY              BOOK LABELS                                              
+THOMAS     PIERSON          1008          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+STEVE      SCHELL           1017          1 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+JENNIFER   SMITH            1010          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+LEILA      SMITH            1006          1 E-BUSINESS THE EASY WAY        BOOK COVER                                               
+LEILA      SMITH            1016          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+
+32 rows selected.
+
+SQL> 
+SQL> -- Taks 2b
+SQL> SELECT firstname, lastname, o.order#, oi.item#, title, gift
+  2  FROM customers c JOIN orders o ON (c.customer# = o.customer#)
+  3  JOIN orderitems oi ON (o.order# = oi.order#)
+  4  JOIN books b ON (oi.isbn = b.isbn)
+  5  JOIN promotion p ON (retail between minretail and maxretail)
+  6  ORDER BY 2, 1, 3, 4;
+
+FIRSTNAME  LASTNAME       ORDER#      ITEM# TITLE                          GIFT                                                     
+---------- ---------- ---------- ---------- ------------------------------ ---------------                                          
+KENNETH    FALAH            1004          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+KENNETH    FALAH            1015          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+TAMMY      GIANA            1007          1 HOLY GRAIL OF ORACLE           FREE SHIPPING                                            
+TAMMY      GIANA            1007          2 E-BUSINESS THE EASY WAY        BOOK COVER                                               
+TAMMY      GIANA            1007          3 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+TAMMY      GIANA            1007          4 DATABASE IMPLEMENTATION        BOOK COVER                                               
+TAMMY      GIANA            1014          1 REVENGE OF MICKEY              BOOK LABELS                                              
+CINDY      GIRARD           1000          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+CINDY      GIRARD           1009          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+CINDY      GIRARD           1009          2 REVENGE OF MICKEY              BOOK LABELS                                              
+KENNETH    JONES            1020          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+JASMINE    LEE              1013          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+JAKE       LUCAS            1001          1 HOW TO MANAGE THE MANAGER      BOOK COVER                                               
+JAKE       LUCAS            1001          2 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+JAKE       LUCAS            1011          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+REESE      MCGOVERN         1002          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+GREG       MONTIASA         1005          1 SHORTEST POEMS                 BOOK COVER                                               
+GREG       MONTIASA         1019          1 REVENGE OF MICKEY              BOOK LABELS                                              
+BONITA     MORALES          1003          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+BONITA     MORALES          1003          2 BODYBUILD IN 10 MINUTES A DAY  BOOK COVER                                               
+BONITA     MORALES          1003          3 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+BONITA     MORALES          1018          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+BONITA     MORALES          1018          2 DATABASE IMPLEMENTATION        BOOK COVER                                               
+BECCA      NELSON           1012          1 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+BECCA      NELSON           1012          2 HANDCRANKED COMPUTERS          BOOK LABELS                                              
+BECCA      NELSON           1012          3 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+BECCA      NELSON           1012          4 REVENGE OF MICKEY              BOOK LABELS                                              
+THOMAS     PIERSON          1008          1 COOKING WITH MUSHROOMS         BOOK LABELS                                              
+STEVE      SCHELL           1017          1 BIG BEAR AND LITTLE DOVE       BOOKMARKER                                               
+JENNIFER   SMITH            1010          1 DATABASE IMPLEMENTATION        BOOK COVER                                               
+LEILA      SMITH            1006          1 E-BUSINESS THE EASY WAY        BOOK COVER                                               
+LEILA      SMITH            1016          1 PAINLESS CHILD-REARING         FREE SHIPPING                                            
+
+32 rows selected.
+
+SQL> 
+SQL> -- Task 3a
+SQL> SELECT UNIQUE firstname || ' ' || lastname AS "Customer Name",
+  2  fname || ' ' || lname AS "Author Name"
+  3  FROM customers c, orders o, orderitems oi, bookauthor ba, author a
+  4  WHERE c.customer# = o.customer#
+  5  AND o.order# = oi.order#
+  6  AND oi.isbn = ba.isbn
+  7  AND ba.authorid = a.authorid
+  8  ORDER BY 1, 2;
+
+Customer Name         Author Name                                                                                                   
+--------------------- ---------------------                                                                                         
+BECCA NELSON          JACK BAKER                                                                                                    
+BECCA NELSON          JANICE JONES                                                                                                  
+BECCA NELSON          LISA WHITE                                                                                                    
+BECCA NELSON          OSCAR FIELDS                                                                                                  
+BECCA NELSON          ROBERT ROBINSON                                                                                               
+BECCA NELSON          WILLIAM WHITE                                                                                                 
+BONITA MORALES        JACK BAKER                                                                                                    
+BONITA MORALES        JAMES AUSTIN                                                                                                  
+BONITA MORALES        JUAN ADAMS                                                                                                    
+BONITA MORALES        LISA PORTER                                                                                                   
+BONITA MORALES        SAM SMITH                                                                                                     
+BONITA MORALES        TINA PETERSON                                                                                                 
+CINDY GIRARD          JACK BAKER                                                                                                    
+CINDY GIRARD          JANICE JONES                                                                                                  
+GREG MONTIASA         JANICE JONES                                                                                                  
+GREG MONTIASA         LISA WHITE                                                                                                    
+JAKE LUCAS            JACK BAKER                                                                                                    
+JAKE LUCAS            OSCAR FIELDS                                                                                                  
+JAKE LUCAS            ROBERT ROBINSON                                                                                               
+JAKE LUCAS            WILLIAM WHITE                                                                                                 
+JASMINE LEE           JAMES AUSTIN                                                                                                  
+JASMINE LEE           JUAN ADAMS                                                                                                    
+JASMINE LEE           TINA PETERSON                                                                                                 
+JENNIFER SMITH        JAMES AUSTIN                                                                                                  
+JENNIFER SMITH        JUAN ADAMS                                                                                                    
+JENNIFER SMITH        TINA PETERSON                                                                                                 
+KENNETH FALAH         JACK BAKER                                                                                                    
+KENNETH FALAH         OSCAR FIELDS                                                                                                  
+KENNETH FALAH         ROBERT ROBINSON                                                                                               
+KENNETH JONES         JACK BAKER                                                                                                    
+LEILA SMITH           JACK BAKER                                                                                                    
+LEILA SMITH           JANICE JONES                                                                                                  
+LEILA SMITH           OSCAR FIELDS                                                                                                  
+LEILA SMITH           ROBERT ROBINSON                                                                                               
+REESE MCGOVERN        JAMES AUSTIN                                                                                                  
+REESE MCGOVERN        JUAN ADAMS                                                                                                    
+REESE MCGOVERN        TINA PETERSON                                                                                                 
+STEVE SCHELL          ROBERT ROBINSON                                                                                               
+TAMMY GIANA           JAMES AUSTIN                                                                                                  
+TAMMY GIANA           JANICE JONES                                                                                                  
+TAMMY GIANA           JUAN ADAMS                                                                                                    
+TAMMY GIANA           ROBERT ROBINSON                                                                                               
+TAMMY GIANA           TINA PETERSON                                                                                                 
+THOMAS PIERSON        JACK BAKER                                                                                                    
+
+44 rows selected.
+
+SQL> 
+SQL> -- Task 3b
+SQL> SELECT UNIQUE firstname || ' ' || lastname AS "Customer Name",
+  2  fname || ' ' || lname AS "Author Name"
+  3  FROM customers NATURAL JOIN orders
+  4  NATURAL JOIN orderitems
+  5  NATURAL JOIN bookauthor
+  6  NATURAL JOIN author
+  7  ORDER BY 1, 2;
+
+Customer Name         Author Name                                                                                                   
+--------------------- ---------------------                                                                                         
+BECCA NELSON          JACK BAKER                                                                                                    
+BECCA NELSON          JANICE JONES                                                                                                  
+BECCA NELSON          LISA WHITE                                                                                                    
+BECCA NELSON          OSCAR FIELDS                                                                                                  
+BECCA NELSON          ROBERT ROBINSON                                                                                               
+BECCA NELSON          WILLIAM WHITE                                                                                                 
+BONITA MORALES        JACK BAKER                                                                                                    
+BONITA MORALES        JAMES AUSTIN                                                                                                  
+BONITA MORALES        JUAN ADAMS                                                                                                    
+BONITA MORALES        LISA PORTER                                                                                                   
+BONITA MORALES        SAM SMITH                                                                                                     
+BONITA MORALES        TINA PETERSON                                                                                                 
+CINDY GIRARD          JACK BAKER                                                                                                    
+CINDY GIRARD          JANICE JONES                                                                                                  
+GREG MONTIASA         JANICE JONES                                                                                                  
+GREG MONTIASA         LISA WHITE                                                                                                    
+JAKE LUCAS            JACK BAKER                                                                                                    
+JAKE LUCAS            OSCAR FIELDS                                                                                                  
+JAKE LUCAS            ROBERT ROBINSON                                                                                               
+JAKE LUCAS            WILLIAM WHITE                                                                                                 
+JASMINE LEE           JAMES AUSTIN                                                                                                  
+JASMINE LEE           JUAN ADAMS                                                                                                    
+JASMINE LEE           TINA PETERSON                                                                                                 
+JENNIFER SMITH        JAMES AUSTIN                                                                                                  
+JENNIFER SMITH        JUAN ADAMS                                                                                                    
+JENNIFER SMITH        TINA PETERSON                                                                                                 
+KENNETH FALAH         JACK BAKER                                                                                                    
+KENNETH FALAH         OSCAR FIELDS                                                                                                  
+KENNETH FALAH         ROBERT ROBINSON                                                                                               
+KENNETH JONES         JACK BAKER                                                                                                    
+LEILA SMITH           JACK BAKER                                                                                                    
+LEILA SMITH           JANICE JONES                                                                                                  
+LEILA SMITH           OSCAR FIELDS                                                                                                  
+LEILA SMITH           ROBERT ROBINSON                                                                                               
+REESE MCGOVERN        JAMES AUSTIN                                                                                                  
+REESE MCGOVERN        JUAN ADAMS                                                                                                    
+REESE MCGOVERN        TINA PETERSON                                                                                                 
+STEVE SCHELL          ROBERT ROBINSON                                                                                               
+TAMMY GIANA           JAMES AUSTIN                                                                                                  
+TAMMY GIANA           JANICE JONES                                                                                                  
+TAMMY GIANA           JUAN ADAMS                                                                                                    
+TAMMY GIANA           ROBERT ROBINSON                                                                                               
+TAMMY GIANA           TINA PETERSON                                                                                                 
+THOMAS PIERSON        JACK BAKER                                                                                                    
+
+44 rows selected.
+
+SQL> 
+SQL> -- Task 3c
+SQL> SELECT UNIQUE firstname || ' ' || lastname AS "Customer Name",
+  2  fname || ' ' || lname AS "Author Name"
+  3  FROM customers JOIN orders USING(customer#)
+  4  JOIN orderitems USING(order#)
+  5  JOIN bookauthor USING(isbn)
+  6  JOIN author USING(authorid)
+  7  ORDER BY 1, 2;
+
+Customer Name         Author Name                                                                                                   
+--------------------- ---------------------                                                                                         
+BECCA NELSON          JACK BAKER                                                                                                    
+BECCA NELSON          JANICE JONES                                                                                                  
+BECCA NELSON          LISA WHITE                                                                                                    
+BECCA NELSON          OSCAR FIELDS                                                                                                  
+BECCA NELSON          ROBERT ROBINSON                                                                                               
+BECCA NELSON          WILLIAM WHITE                                                                                                 
+BONITA MORALES        JACK BAKER                                                                                                    
+BONITA MORALES        JAMES AUSTIN                                                                                                  
+BONITA MORALES        JUAN ADAMS                                                                                                    
+BONITA MORALES        LISA PORTER                                                                                                   
+BONITA MORALES        SAM SMITH                                                                                                     
+BONITA MORALES        TINA PETERSON                                                                                                 
+CINDY GIRARD          JACK BAKER                                                                                                    
+CINDY GIRARD          JANICE JONES                                                                                                  
+GREG MONTIASA         JANICE JONES                                                                                                  
+GREG MONTIASA         LISA WHITE                                                                                                    
+JAKE LUCAS            JACK BAKER                                                                                                    
+JAKE LUCAS            OSCAR FIELDS                                                                                                  
+JAKE LUCAS            ROBERT ROBINSON                                                                                               
+JAKE LUCAS            WILLIAM WHITE                                                                                                 
+JASMINE LEE           JAMES AUSTIN                                                                                                  
+JASMINE LEE           JUAN ADAMS                                                                                                    
+JASMINE LEE           TINA PETERSON                                                                                                 
+JENNIFER SMITH        JAMES AUSTIN                                                                                                  
+JENNIFER SMITH        JUAN ADAMS                                                                                                    
+JENNIFER SMITH        TINA PETERSON                                                                                                 
+KENNETH FALAH         JACK BAKER                                                                                                    
+KENNETH FALAH         OSCAR FIELDS                                                                                                  
+KENNETH FALAH         ROBERT ROBINSON                                                                                               
+KENNETH JONES         JACK BAKER                                                                                                    
+LEILA SMITH           JACK BAKER                                                                                                    
+LEILA SMITH           JANICE JONES                                                                                                  
+LEILA SMITH           OSCAR FIELDS                                                                                                  
+LEILA SMITH           ROBERT ROBINSON                                                                                               
+REESE MCGOVERN        JAMES AUSTIN                                                                                                  
+REESE MCGOVERN        JUAN ADAMS                                                                                                    
+REESE MCGOVERN        TINA PETERSON                                                                                                 
+STEVE SCHELL          ROBERT ROBINSON                                                                                               
+TAMMY GIANA           JAMES AUSTIN                                                                                                  
+TAMMY GIANA           JANICE JONES                                                                                                  
+TAMMY GIANA           JUAN ADAMS                                                                                                    
+TAMMY GIANA           ROBERT ROBINSON                                                                                               
+TAMMY GIANA           TINA PETERSON                                                                                                 
+THOMAS PIERSON        JACK BAKER                                                                                                    
+
+44 rows selected.
+
+SQL> 
+SQL> -- Task 3d
+SQL> SELECT UNIQUE firstname || ' ' || lastname AS "Customer Name",
+  2  fname || ' ' || lname AS "Author Name"
+  3  FROM customers c JOIN orders o ON(c.customer# = o.customer#)
+  4  JOIN orderitems oi ON(o.order# = oi.order#)
+  5  JOIN bookauthor ba ON(oi.isbn = ba.isbn)
+  6  JOIN author a ON(ba.authorid = a.authorid)
+  7  ORDER BY 1, 2;
+
+Customer Name         Author Name                                                                                                   
+--------------------- ---------------------                                                                                         
+BECCA NELSON          JACK BAKER                                                                                                    
+BECCA NELSON          JANICE JONES                                                                                                  
+BECCA NELSON          LISA WHITE                                                                                                    
+BECCA NELSON          OSCAR FIELDS                                                                                                  
+BECCA NELSON          ROBERT ROBINSON                                                                                               
+BECCA NELSON          WILLIAM WHITE                                                                                                 
+BONITA MORALES        JACK BAKER                                                                                                    
+BONITA MORALES        JAMES AUSTIN                                                                                                  
+BONITA MORALES        JUAN ADAMS                                                                                                    
+BONITA MORALES        LISA PORTER                                                                                                   
+BONITA MORALES        SAM SMITH                                                                                                     
+BONITA MORALES        TINA PETERSON                                                                                                 
+CINDY GIRARD          JACK BAKER                                                                                                    
+CINDY GIRARD          JANICE JONES                                                                                                  
+GREG MONTIASA         JANICE JONES                                                                                                  
+GREG MONTIASA         LISA WHITE                                                                                                    
+JAKE LUCAS            JACK BAKER                                                                                                    
+JAKE LUCAS            OSCAR FIELDS                                                                                                  
+JAKE LUCAS            ROBERT ROBINSON                                                                                               
+JAKE LUCAS            WILLIAM WHITE                                                                                                 
+JASMINE LEE           JAMES AUSTIN                                                                                                  
+JASMINE LEE           JUAN ADAMS                                                                                                    
+JASMINE LEE           TINA PETERSON                                                                                                 
+JENNIFER SMITH        JAMES AUSTIN                                                                                                  
+JENNIFER SMITH        JUAN ADAMS                                                                                                    
+JENNIFER SMITH        TINA PETERSON                                                                                                 
+KENNETH FALAH         JACK BAKER                                                                                                    
+KENNETH FALAH         OSCAR FIELDS                                                                                                  
+KENNETH FALAH         ROBERT ROBINSON                                                                                               
+KENNETH JONES         JACK BAKER                                                                                                    
+LEILA SMITH           JACK BAKER                                                                                                    
+LEILA SMITH           JANICE JONES                                                                                                  
+LEILA SMITH           OSCAR FIELDS                                                                                                  
+LEILA SMITH           ROBERT ROBINSON                                                                                               
+REESE MCGOVERN        JAMES AUSTIN                                                                                                  
+REESE MCGOVERN        JUAN ADAMS                                                                                                    
+REESE MCGOVERN        TINA PETERSON                                                                                                 
+STEVE SCHELL          ROBERT ROBINSON                                                                                               
+TAMMY GIANA           JAMES AUSTIN                                                                                                  
+TAMMY GIANA           JANICE JONES                                                                                                  
+TAMMY GIANA           JUAN ADAMS                                                                                                    
+TAMMY GIANA           ROBERT ROBINSON                                                                                               
+TAMMY GIANA           TINA PETERSON                                                                                                 
+THOMAS PIERSON        JACK BAKER                                                                                                    
+
+44 rows selected.
+
+SQL> 
+SQL> -- Task 4
+SQL> SELECT fname, lname, title
+  2  FROM author LEFT OUTER JOIN bookauthor USING(authorid)
+  3  LEFT OUTER JOIN books USING (isbn)
+  4  ORDER BY 2, 1, 3;
+
+FNAME      LNAME      TITLE                                                                                                         
+---------- ---------- ------------------------------                                                                                
+JUAN       ADAMS      DATABASE IMPLEMENTATION                                                                                       
+JAMES      AUSTIN     DATABASE IMPLEMENTATION                                                                                       
+JAMES      AUSTIN     HOLY GRAIL OF ORACLE                                                                                          
+JACK       BAKER      COOKING WITH MUSHROOMS                                                                                        
+JACK       BAKER      PAINLESS CHILD-REARING                                                                                        
+OSCAR      FIELDS     PAINLESS CHILD-REARING                                                                                        
+JANICE     JONES      E-BUSINESS THE EASY WAY                                                                                       
+JANICE     JONES      REVENGE OF MICKEY                                                                                             
+TAMARA     KZOCHSKY   BUILDING A CAR WITH TOOTHPICKS                                                                                
+SHEILA     MARTINEZ                                                                                                                 
+TINA       PETERSON   DATABASE IMPLEMENTATION                                                                                       
+LISA       PORTER     BODYBUILD IN 10 MINUTES A DAY                                                                                 
+ROBERT     ROBINSON   BIG BEAR AND LITTLE DOVE                                                                                      
+ROBERT     ROBINSON   PAINLESS CHILD-REARING                                                                                        
+SAM        SMITH      BODYBUILD IN 10 MINUTES A DAY                                                                                 
+SAM        SMITH      HOW TO GET FASTER PIZZA                                                                                       
+SAM        SMITH      THE WOK WAY TO COOK                                                                                           
+LISA       WHITE      HANDCRANKED COMPUTERS                                                                                         
+LISA       WHITE      SHORTEST POEMS                                                                                                
+WILLIAM    WHITE      HANDCRANKED COMPUTERS                                                                                         
+WILLIAM    WHITE      HOW TO MANAGE THE MANAGER                                                                                     
+ANTHONY    WILKINSON                                                                                                                
+
+22 rows selected.
+
+SQL> 
+SQL> --create a file
+SQL> spool off

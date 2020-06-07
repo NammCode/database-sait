@@ -113,26 +113,5 @@ ORDER BY 1,2;
 
 
 
-SELECT firstname, lastname, o.order#, s.orderttl "Value" FROM customers c, orders o, 
-(SELECT order#, customer#, SUM(paideach*quantity) orderttl 
-FROM orders NATURAL JOIN orderitems NATURAL JOIN customers
-GROUP BY ROLLUP (order#, customer#)) s
-WHERE c.customer# = o.customer#
-AND o.order# = s.order#
-GROUP BY ROLLUP (firstname, lastname, o.order#, s.orderttl)
-ORDER BY 2, 1, 3;
-
-
-
-SELECT order#, customer#, SUM(paideach*quantity) orderttl 
-FROM orders NATURAL JOIN orderitems NATURAL JOIN customers
-GROUP BY ROLLUP (order#, customer#);
-
-
-
-
-
-
-
 
 

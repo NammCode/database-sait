@@ -8,11 +8,12 @@
 set echo on 
 set linesize 132
 set pagesize 66
-spool c:\cprg250\Module4\part_5\spool.txt
-
+--spool c:\cprg250\Module4\part_5\spool.txt
+spool c:\Coding\Database\Module4\Part5\spool.txt
 
 -- Question 2
-SELECT INITCAP(firstname) "First", INITCAP(lastname) "Last", o.order#, s.orderttl "Order Ttl" FROM customers c, orders o, 
+SELECT INITCAP(firstname) "First", INITCAP(lastname) "Last", o.order#, s.orderttl "Order Ttl" 
+FROM customers c, orders o, 
 (SELECT order#, SUM(paideach*quantity) orderttl FROM orders NATURAL JOIN orderitems
 GROUP BY order#) s
 WHERE c.customer# = o.customer#
@@ -38,5 +39,14 @@ GROUP BY(fname, lname, quantity)) s
 GROUP BY (fname, lname)
 HAVING SUM (s.perBook * s.quantity) > 9
 ORDER BY 2, 1;
+
+-- Question 6
+-- My result don't have total in Value (have only 35 rows selected)
+SELECT INITCAP(firstname) "FIRST", INITCAP(lastname) "LAST", s.order#, s.orderttl "Value" 
+FROM customers c, 
+(SELECT customer#, order#, SUM(paideach*quantity) orderttl FROM orders NATURAL JOIN orderitems
+GROUP BY ROLLUP (customer#, order#)) s
+WHERE c.customer# = s.customer#
+ORDER BY 2, 1, 3;
 
 spool off

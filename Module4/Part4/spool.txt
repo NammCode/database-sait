@@ -1,0 +1,126 @@
+SQL> 
+SQL> -- Question 2
+SQL> column "Pub Date" format A20;
+SQL> SELECT INITCAP(lname) "Surname",
+  2  INITCAP(title) "Book Title",
+  3  TO_CHAR(pubdate,'FMMonth DD, YYYY') "Pub Date",
+  4  (retail - NVL(discount,0)) "Final Price"
+  5  FROM books NATURAL JOIN bookauthor NATURAL JOIN author
+  6  ORDER BY title;
+
+Surname    Book Title                     Pub Date             Final Price                                                          
+---------- ------------------------------ -------------------- -----------                                                          
+Robinson   Big Bear And Little Dove       November 8, 2005            8.95                                                          
+Smith      Bodybuild In 10 Minutes A Day  January 21, 2005           30.95                                                          
+Porter     Bodybuild In 10 Minutes A Day  January 21, 2005           30.95                                                          
+Kzochsky   Building A Car With Toothpicks March 18, 2006             56.95                                                          
+Baker      Cooking With Mushrooms         February 28, 2004          19.95                                                          
+Adams      Database Implementation        June 4, 2003               55.95                                                          
+Peterson   Database Implementation        June 4, 2003               55.95                                                          
+Austin     Database Implementation        June 4, 2003               55.95                                                          
+Jones      E-Business The Easy Way        March 1, 2006               54.5                                                          
+White      Handcranked Computers          January 21, 2005              25                                                          
+White      Handcranked Computers          January 21, 2005              25                                                          
+Austin     Holy Grail Of Oracle           December 31, 2005          72.15                                                          
+Smith      How To Get Faster Pizza        November 11, 2006          28.45                                                          
+White      How To Manage The Manager      May 9, 2003                31.95                                                          
+Robinson   Painless Child-Rearing         July 17, 2004              85.45                                                          
+Baker      Painless Child-Rearing         July 17, 2004              85.45                                                          
+Fields     Painless Child-Rearing         July 17, 2004              85.45                                                          
+Jones      Revenge Of Mickey              December 14, 2005             22                                                          
+White      Shortest Poems                 May 1, 2005                39.95                                                          
+Smith      The Wok Way To Cook            September 11, 2004         28.75                                                          
+
+20 rows selected.
+
+SQL> 
+SQL> -- Question 3
+SQL> column "Date Published" format A20;
+SQL> column "Review Date" format A20;
+SQL> SELECT INITCAP(title) "Book Title", pubdate "Date Published",
+  2  ADD_MONTHS(pubdate, 6) "Review Date"
+  3  FROM books
+  4  ORDER BY title;
+
+Book Title                     Date Published       Review Date                                                                     
+------------------------------ -------------------- --------------------                                                            
+Big Bear And Little Dove       08-NOV-05            08-MAY-06                                                                       
+Bodybuild In 10 Minutes A Day  21-JAN-05            21-JUL-05                                                                       
+Building A Car With Toothpicks 18-MAR-06            18-SEP-06                                                                       
+Cooking With Mushrooms         28-FEB-04            28-AUG-04                                                                       
+Database Implementation        04-JUN-03            04-DEC-03                                                                       
+E-Business The Easy Way        01-MAR-06            01-SEP-06                                                                       
+Handcranked Computers          21-JAN-05            21-JUL-05                                                                       
+Holy Grail Of Oracle           31-DEC-05            30-JUN-06                                                                       
+How To Get Faster Pizza        11-NOV-06            11-MAY-07                                                                       
+How To Manage The Manager      09-MAY-03            09-NOV-03                                                                       
+Painless Child-Rearing         17-JUL-04            17-JAN-05                                                                       
+Revenge Of Mickey              14-DEC-05            14-JUN-06                                                                       
+Shortest Poems                 01-MAY-05            01-NOV-05                                                                       
+The Wok Way To Cook            11-SEP-04            11-MAR-05                                                                       
+
+14 rows selected.
+
+SQL> 
+SQL> -- Question 4
+SQL> SELECT INITCAP(title) "Book Title",
+  2  TO_CHAR((retail - NVL(discount,0)), '9,990.00') "Price",
+  3  TO_CHAR(cost, '9,990.00') "Cost",
+  4  TO_CHAR((retail-cost)/cost*100, '9,990.00') "% Profit"
+  5  FROM books
+  6  ORDER BY 4 DESC;
+
+Book Title                     Price     Cost      % Profit                                                                         
+------------------------------ --------- --------- ---------                                                                        
+How To Manage The Manager          31.95     15.40    107.47                                                                        
+Painless Child-Rearing             85.45     48.00     87.40                                                                        
+Shortest Poems                     39.95     21.85     82.84                                                                        
+Database Implementation            55.95     31.40     78.18                                                                        
+Big Bear And Little Dove            8.95      5.32     68.23                                                                        
+How To Get Faster Pizza            28.45     17.85     67.79                                                                        
+Bodybuild In 10 Minutes A Day      30.95     18.75     65.07                                                                        
+Holy Grail Of Oracle               72.15     47.25     60.74                                                                        
+Cooking With Mushrooms             19.95     12.50     59.60                                                                        
+Building A Car With Toothpicks     56.95     37.80     58.60                                                                        
+Revenge Of Mickey                  22.00     14.20     54.93                                                                        
+The Wok Way To Cook                28.75     19.00     51.32                                                                        
+E-Business The Easy Way            54.50     37.90     43.80                                                                        
+Handcranked Computers              25.00     21.80     14.68                                                                        
+
+14 rows selected.
+
+SQL> 
+SQL> -- Question 5
+SQL> SELECT INITCAP(title) "Book Title",
+  2  TO_CHAR((retail-cost)/cost*100, '9,990.00') AS "Margin",
+  3  TO_CHAR(discount, '9,990.00') "Discount",
+  4  CASE WHEN discount IS NOT NULL THEN 'Discounter, will NOT be restrocked'
+  5  	      WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 60 THEN 'Very High Profit'
+  6  	  WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 30 THEN 'High Profit'
+  7  	      WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 0 THEN 'Loss Leader'
+  8  END "Pricing Structure"
+  9  FROM books
+ 10  ORDER BY 1;
+
+Book Title                     Margin    Discount  Pricing Structure                                                                
+------------------------------ --------- --------- ----------------------------------                                               
+Big Bear And Little Dove           68.23           Very High Profit                                                                 
+Bodybuild In 10 Minutes A Day      65.07           Very High Profit                                                                 
+Building A Car With Toothpicks     58.60      3.00 Discounter, will NOT be restrocked                                               
+Cooking With Mushrooms             59.60           High Profit                                                                      
+Database Implementation            78.18           Very High Profit                                                                 
+E-Business The Easy Way            43.80           High Profit                                                                      
+Handcranked Computers              14.68           Loss Leader                                                                      
+Holy Grail Of Oracle               60.74      3.80 Discounter, will NOT be restrocked                                               
+How To Get Faster Pizza            67.79      1.50 Discounter, will NOT be restrocked                                               
+How To Manage The Manager         107.47           Very High Profit                                                                 
+Painless Child-Rearing             87.40      4.50 Discounter, will NOT be restrocked                                               
+Revenge Of Mickey                  54.93           High Profit                                                                      
+Shortest Poems                     82.84           Very High Profit                                                                 
+The Wok Way To Cook                51.32           High Profit                                                                      
+
+14 rows selected.
+
+SQL> 
+SQL> --create a file
+SQL> spool off

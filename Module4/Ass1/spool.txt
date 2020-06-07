@@ -1,0 +1,116 @@
+SQL> 
+SQL> -- Question 1
+SQL> SELECT customer_number "Cust #" , account_type "Account Type" , date_created "Date" , REPLACE(Address1, 'Apt' , 'Apartment') "Address"
+  2  FROM wgb_account NATURAL JOIN wgb_customer
+  3  WHERE date_created LIKE '%JUL%'
+  4  ORDER BY customer_number;
+
+Cust #  Account Type Date                 Address                                                                                   
+------- ------------ -------------------- ---------------                                                                           
+1112401            2 05-JUL-18            Apartment 201                                                                             
+1113501            4 03-JUL-18            Box 5                                                                                     
+
+SQL> 
+SQL> -- Question 2
+SQL> SELECT INITCAP(first_name) "First" , INITCAP(surname) "Last" , phone "Phone" , a.customer_number "Cust#" , account_type "Type" , balance "$"
+  2  FROM wgb_customer a , wgb_account b
+  3  WHERE a.customer_number =b.customer_number
+  4  AND  account_type = 1
+  5  ORDER BY 2 , 1 , 4 , 5;
+
+First                Last                           Phone Cust#         Type          $                                             
+-------------------- ------------------------- ---------- ------- ---------- ----------                                             
+Peter                Chen                         6520128 2566217          1          0                                             
+Patricia             Lee                          6332112 9871332          1        500                                             
+Henri                Poincare                     7274036 1113501          1     565.23                                             
+John                 Synge                        5210001 1112401          1     6433.5                                             
+
+SQL> 
+SQL> 
+SQL> -- Question 3
+SQL> SELECT INITCAP(first_name) "First" , INITCAP(surname) "Last" , phone "Phone" , a.customer_number "Cust#" , account_type "Type" , balance "$"
+  2  FROM wgb_customer a JOIN wgb_account b ON(a.customer_number = b.customer_number)
+  3  WHERE account_type = 2
+  4  ORDER BY 2 , 1 , 4 , 5;
+
+First                Last                           Phone Cust#         Type          $                                             
+-------------------- ------------------------- ---------- ------- ---------- ----------                                             
+Henri                Poincare                     7274036 1113501          2        200                                             
+John                 Synge                        5210001 1112401          2    2999.76                                             
+
+SQL> 
+SQL> -- Question 4
+SQL> SELECT INITCAP (first_name) "Name", INITCAP(account_description) "Description" , balance , transaction_date "Date" , LPAD(transaction_amount,9,'*') "Amount"
+  2  FROM wgb_transaction t, wgb_account_type a, wgb_customer c, wgb_account b
+  3  WHERE t.account_type = a.account_type
+  4  AND t.customer_number = c.customer_number
+  5  AND t.customer_number = b.customer_number
+  6  AND a.account_type = b.account_type
+  7  AND a.account_description LIKE '%Interest%'
+  8  ORDER BY 1 DESC, 4 ASC;
+
+Name                 Description                            BALANCE Date                 Amount                                     
+-------------------- ----------------------------------- ---------- -------------------- ------------------------------------       
+John                 Daily Interest Savings                 2999.76 02-JAN-19            *******60                                  
+John                 Daily Interest Savings                 2999.76 06-JAN-19            *******73                                  
+John                 Daily Interest Savings                 2999.76 07-JAN-19            ****12.17                                  
+John                 Daily Interest Savings                 2999.76 31-JAN-19            ******.22                                  
+John                 Daily Interest Savings                 2999.76 31-JAN-19            *****1065                                  
+John                 Daily Interest Savings                 2999.76 31-JAN-19            ******565                                  
+Henri                Daily Interest Savings                     200 15-JAN-19            *******40                                  
+
+7 rows selected.
+
+SQL> 
+SQL> -- Question 5
+SQL> column "Date" format A20
+SQL> SELECT first_name "First" , surname "Last" , customer_number "Cust #" , REPLACE(date_created , 'DD-MM-YY' , 'DD/MM/YY') "Date" , account_type "Type"
+  2  FROM wgb_account JOIN wgb_customer USING(customer_number)
+  3  ORDER BY 2 , 1 , 4 , 5;
+
+First                Last                      Cust #  Date                       Type                                              
+-------------------- ------------------------- ------- -------------------- ----------                                              
+Peter                Chen                      2566217 01-JAN-17                     1                                              
+Peter                Chen                      2566217 01-JAN-17                     4                                              
+Peter                Chen                      2566217 01-JAN-18                     5                                              
+Byron                Griffith                  1113004 02-JAN-18                     3                                              
+Patricia             Lee                       9871332 01-JAN-19                     1                                              
+Henri                Poincare                  1113501 01-JAN-18                     2                                              
+Henri                Poincare                  1113501 03-JUL-18                     4                                              
+Henri                Poincare                  1113501 05-SEP-16                     1                                              
+John                 Synge                     1112401 04-JAN-19                     1                                              
+John                 Synge                     1112401 05-JUL-18                     2                                              
+
+10 rows selected.
+
+SQL> 
+SQL> 
+SQL> -- Question 6
+SQL> SELECT first_name as "First",surname as "Last",customer_number as "Cust #",
+  2  CASE WHEN account_type = 1 THEN 'Chq'
+  3  	  WHEN account_type = 2 THEN 'Daily Sav'
+  4  	      WHEN account_type = 3 THEN 'Mthly Sav'
+  5  	      WHEN account_type = 4 THEN 'RRSP'
+  6  	      ELSE 'GIC' END as "Type", TO_CHAR(balance, '$99,990.99')"Opening Bal"
+  7  FROM wgb_account_type JOIN wgb_account USING (account_type)
+  8  JOIN wgb_customer USING (customer_number)
+  9  ORDER by 1,4 DESC;
+
+First                Last                      Cust #  Type      Opening Bal                                                        
+-------------------- ------------------------- ------- --------- -----------                                                        
+Byron                Griffith                  1113004 Mthly Sav  $10,000.00                                                        
+Henri                Poincare                  1113501 RRSP        $2,000.00                                                        
+Henri                Poincare                  1113501 Daily Sav     $200.00                                                        
+Henri                Poincare                  1113501 Chq           $565.23                                                        
+John                 Synge                     1112401 Daily Sav   $2,999.76                                                        
+John                 Synge                     1112401 Chq         $6,433.50                                                        
+Patricia             Lee                       9871332 Chq           $500.00                                                        
+Peter                Chen                      2566217 RRSP          $700.00                                                        
+Peter                Chen                      2566217 GIC         $5,000.00                                                        
+Peter                Chen                      2566217 Chq             $0.00                                                        
+
+10 rows selected.
+
+SQL> 
+SQL> -- Upload
+SQL> spool off

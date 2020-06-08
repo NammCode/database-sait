@@ -28,7 +28,7 @@ SELECT INITCAP(category) "Category", COUNT(*) "Num of Books",
 TO_CHAR(AVG(retail), '$9,990.00') "Average" 
 FROM books 
 GROUP BY category
-HAVING COUNT(*) > 1
+HAVING COUNT(*) >= 2
 ORDER BY 1;
 
 -- Question 5
@@ -37,16 +37,14 @@ FROM (SELECT fname, lname, quantity, COUNT(*) perBook
 FROM author NATURAL JOIN bookauthor NATURAL JOIN books NATURAL JOIN orderitems
 GROUP BY(fname, lname, quantity)) s
 GROUP BY (fname, lname)
-HAVING SUM (s.perBook * s.quantity) > 9
+HAVING SUM (s.perBook * s.quantity) >= 10
 ORDER BY 2, 1;
 
 -- Question 6
 -- My result don't have total in Value (have only 35 rows selected)
-SELECT INITCAP(firstname) "FIRST", INITCAP(lastname) "LAST", s.order#, s.orderttl "Value" 
-FROM customers c, 
-(SELECT customer#, order#, SUM(paideach*quantity) orderttl FROM orders NATURAL JOIN orderitems
-GROUP BY ROLLUP (customer#, order#)) s
-WHERE c.customer# = s.customer#
-ORDER BY 2, 1, 3;
+SELECT firstname, lastname, order#, SUM(paideach*quantity) orderttl 
+FROM orders NATURAL JOIN orderitems NATURAL JOIN customers
+GROUP BY ROLLUP ((firstname, lastname), order#);
 
+-- Create file spool
 spool off

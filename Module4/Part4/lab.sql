@@ -41,10 +41,10 @@ SELECT INITCAP(title) "Book Title",
 TO_CHAR((retail-cost)/cost*100, '9,990.00') AS "Margin",
 TO_CHAR(discount, '9,990.00') "Discount",
 CASE WHEN discount IS NOT NULL THEN 'Discounter, will NOT be restrocked'
-	 WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 60 THEN 'Very High Profit'
+     WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 60 THEN 'Very High Profit'
      WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 30 THEN 'High Profit'
-	 WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 0 THEN 'Loss Leader'
-END "Pricing Structure"
+     WHEN TO_CHAR((retail-cost)/cost*100, '9,990.00') >= 0 THEN 'Loss Leader'
+     END "Pricing Structure"
 FROM books 
 ORDER BY 1;
 

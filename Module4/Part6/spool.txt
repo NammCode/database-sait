@@ -1,0 +1,154 @@
+SQL> 
+SQL> -- Question 1
+SQL> SELECT firstname, lastname
+  2  FROM customers
+  3  WHERE state LIKE (SELECT state
+  4  				       FROM customers
+  5  				       WHERE firstname LIKE '%LEILA%'
+  6  				       AND lastname LIKE '%SMITH%')
+  7  AND firstname NOT LIKE '%LEILA%'
+  8  AND lastname NOT LIKE '%SMITH%'
+  9  ORDER BY lastname, firstname;
+
+FIRSTNAME  LASTNAME                                                                                                                 
+---------- ----------                                                                                                               
+BONITA     MORALES                                                                                                                  
+NICHOLAS   NGUYEN                                                                                                                   
+STEVE      SCHELL                                                                                                                   
+
+SQL> 
+SQL> -- Question 2
+SQL> SELECT lastname, title, retail,
+  2  (SELECT AVG(retail) FROM books) "Avg"
+  3  FROM  customers NATURAL JOIN orders NATURAL JOIN orderitems NATURAL JOIN books
+  4  GROUP BY (lastname, title, retail)
+  5  HAVING retail > (SELECT AVG(retail) FROM books)
+  6  ORDER BY 1, 2, 3;
+
+LASTNAME   TITLE                              RETAIL        Avg                                                                     
+---------- ------------------------------ ---------- ----------                                                                     
+FALAH      PAINLESS CHILD-REARING              89.95 40.9821429                                                                     
+GIANA      DATABASE IMPLEMENTATION             55.95 40.9821429                                                                     
+GIANA      E-BUSINESS THE EASY WAY              54.5 40.9821429                                                                     
+GIANA      HOLY GRAIL OF ORACLE                75.95 40.9821429                                                                     
+LEE        DATABASE IMPLEMENTATION             55.95 40.9821429                                                                     
+LUCAS      PAINLESS CHILD-REARING              89.95 40.9821429                                                                     
+MCGOVERN   DATABASE IMPLEMENTATION             55.95 40.9821429                                                                     
+MORALES    DATABASE IMPLEMENTATION             55.95 40.9821429                                                                     
+NELSON     PAINLESS CHILD-REARING              89.95 40.9821429                                                                     
+SMITH      DATABASE IMPLEMENTATION             55.95 40.9821429                                                                     
+SMITH      E-BUSINESS THE EASY WAY              54.5 40.9821429                                                                     
+SMITH      PAINLESS CHILD-REARING              89.95 40.9821429                                                                     
+
+12 rows selected.
+
+SQL> 
+SQL> -- Question 4a
+SQL> SELECT INITCAP(fname) || ' ' || INITCAP(lname) "Author",
+  2  INITCAP(title) "Last Book",
+  3  pubdate "Date Pub"
+  4  FROM author NATURAL JOIN bookauthor NATURAL JOIN books
+  5  WHERE (authorid, pubdate) IN (SELECT authorid, MAX(pubdate)
+  6  							       FROM books NATURAL JOIN bookauthor
+  7  							       GROUP BY authorid)
+  8  ORDER BY lname, fname, title;
+
+Author                Last Book                      Date Pub                                                                       
+--------------------- ------------------------------ ---------                                                                      
+Juan Adams            Database Implementation        04-JUN-03                                                                      
+James Austin          Holy Grail Of Oracle           31-DEC-05                                                                      
+Jack Baker            Painless Child-Rearing         17-JUL-04                                                                      
+Oscar Fields          Painless Child-Rearing         17-JUL-04                                                                      
+Janice Jones          E-Business The Easy Way        01-MAR-06                                                                      
+Tamara Kzochsky       Building A Car With Toothpicks 18-MAR-06                                                                      
+Tina Peterson         Database Implementation        04-JUN-03                                                                      
+Lisa Porter           Bodybuild In 10 Minutes A Day  21-JAN-05                                                                      
+Robert Robinson       Big Bear And Little Dove       08-NOV-05                                                                      
+Sam Smith             How To Get Faster Pizza        11-NOV-06                                                                      
+Lisa White            Shortest Poems                 01-MAY-05                                                                      
+William White         Handcranked Computers          21-JAN-05                                                                      
+
+12 rows selected.
+
+SQL> 
+SQL> -- Question 4b
+SQL> SELECT INITCAP(fname) || ' ' || INITCAP(lname) "Author",
+  2  INITCAP(title) "Last Book",
+  3  pubdate "Date Pub"
+  4  FROM books b JOIN bookauthor ba ON (b.isbn = ba.isbn)
+  5  JOIN author a ON (ba.authorid = a.authorid)
+  6  WHERE b.pubdate = (SELECT MAX(pubdate)
+  7  					FROM books bs NATURAL JOIN bookauthor bas
+  8  					WHERE bas.authorid = ba.authorid)
+  9  ORDER BY lname, fname, title;
+
+Author                Last Book                      Date Pub                                                                       
+--------------------- ------------------------------ ---------                                                                      
+Juan Adams            Database Implementation        04-JUN-03                                                                      
+James Austin          Holy Grail Of Oracle           31-DEC-05                                                                      
+Jack Baker            Painless Child-Rearing         17-JUL-04                                                                      
+Oscar Fields          Painless Child-Rearing         17-JUL-04                                                                      
+Janice Jones          E-Business The Easy Way        01-MAR-06                                                                      
+Tamara Kzochsky       Building A Car With Toothpicks 18-MAR-06                                                                      
+Tina Peterson         Database Implementation        04-JUN-03                                                                      
+Lisa Porter           Bodybuild In 10 Minutes A Day  21-JAN-05                                                                      
+Robert Robinson       Big Bear And Little Dove       08-NOV-05                                                                      
+Sam Smith             How To Get Faster Pizza        11-NOV-06                                                                      
+Lisa White            Shortest Poems                 01-MAY-05                                                                      
+William White         Handcranked Computers          21-JAN-05                                                                      
+
+12 rows selected.
+
+SQL> 
+SQL> -- Question 5
+SQL> SELECT c.firstname, c.lastname, a.num
+  2  FROM customers c,
+  3  (SELECT customer#, COUNT(order#) AS num
+  4  FROM orders
+  5  GROUP BY customer#
+  6  ORDER BY COUNT(order#) DESC) a
+  7  WHERE c.customer# = a.customer#
+  8  ORDER BY 3 DESC, 2, 1
+  9  OFFSET 10 ROWS
+ 10  FETCH NEXT 10 ROWS ONLY;
+
+FIRSTNAME  LASTNAME          NUM                                                                                                    
+---------- ---------- ----------                                                                                                    
+BECCA      NELSON              1                                                                                                    
+THOMAS     PIERSON             1                                                                                                    
+STEVE      SCHELL              1                                                                                                    
+JENNIFER   SMITH               1                                                                                                    
+
+SQL> 
+SQL> -- Question 6
+SQL> SELECT a.customer#,
+  2  MAX(a.cal) "Value of Largeset Order"
+  3  FROM (SELECT customer#, order#,
+  4  	       SUM(quantity*paideach) cal
+  5  	       FROM orderitems NATURAL JOIN orders
+  6  	       GROUP BY (customer#, order#)) a
+  7  GROUP BY (a.customer#)
+  8  ORDER BY 1;
+
+ CUSTOMER# Value of Largeset Order                                                                                                  
+---------- -----------------------                                                                                                  
+      1001                  106.85                                                                                                  
+      1003                   85.45                                                                                                  
+      1004                    39.9                                                                                                  
+      1005                   41.95                                                                                                  
+      1007                  335.85                                                                                                  
+      1008                   19.95                                                                                                  
+      1010                   117.4                                                                                                  
+      1011                   111.9                                                                                                  
+      1014                   55.95                                                                                                  
+      1015                    17.9                                                                                                  
+      1017                   166.4                                                                                                  
+      1018                   39.95                                                                                                  
+      1019                   55.95                                                                                                  
+      1020                   170.9                                                                                                  
+
+14 rows selected.
+
+SQL> 
+SQL> -- Create file spool
+SQL> spool off

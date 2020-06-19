@@ -64,14 +64,19 @@ OFFSET 10 ROWS
 FETCH NEXT 10 ROWS ONLY;
 
 -- Question 6
-SELECT a.customer#,  
-MAX(a.cal) "Value of Largeset Order"
+SELECT customer#, order#, cal "Value of Largeset Order"
 FROM (SELECT customer#, order#, 
 	  SUM(quantity*paideach) cal
 	  FROM orderitems NATURAL JOIN orders 
-	  GROUP BY (customer#, order#)) a
-GROUP BY (a.customer#)
-ORDER BY 1;
+	  GROUP BY (customer#, order#))
+WHERE (customer#, cal) IN (SELECT a.customer#,  
+							MAX(a.cal) 
+							FROM (SELECT customer#, order#, 
+								  SUM(quantity*paideach) cal 
+								  FROM orderitems NATURAL JOIN orders 
+								  GROUP BY (customer#, order#)) a
+							GROUP BY (a.customer#))
+ORDER BY customer#;
 
 -- Create file spool
 spool off

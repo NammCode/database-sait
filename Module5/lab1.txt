@@ -1,0 +1,69 @@
+SQL> 
+SQL> CLEAR COLUMNS
+SQL> CLEAR BREAKS
+SQL> 
+SQL> TTITLE CENTER 'Customer / Title Information' SKIP -
+> CENTER 'Customer Order Evaluation' SKIP 2
+SQL> BTITLE 'Internal Use Only'
+SQL> 
+SQL> COLUMN INITCAP(title) HEADING 'Book|Title'
+SQL> COLUMN INITCAP(lastname) HEADING 'Last|Name'
+SQL> COLUMN INITCAP(firstname) HEADING 'First|Name'
+SQL> COLUMN cost FORMAT $999.99 HEADING 'Book|Cost'
+SQL> BREAK ON INITCAP(title)
+SQL> 
+SQL> SELECT INITCAP(title),
+  2  INITCAP(lastname),
+  3  INITCAP(firstname), cost
+  4  FROM customers NATURAL JOIN orders
+  5  NATURAL JOIN orderitems
+  6  NATURAL JOIN books
+  7  ORDER BY 1, 2, 3;
+
+                   Customer / Title Information                  
+                    Customer Order Evaluation                    
+                                                                 
+Book                           Last       First          Book    
+Title                          Name       Name           Cost    
+------------------------------ ---------- ---------- --------    
+Big Bear And Little Dove       Giana      Tammy         $5.32    
+                               Nelson     Becca         $5.32    
+                               Schell     Steve         $5.32    
+Bodybuild In 10 Minutes A Day  Morales    Bonita       $18.75    
+Cooking With Mushrooms         Falah      Kenneth      $12.50    
+                               Girard     Cindy        $12.50    
+                               Girard     Cindy        $12.50    
+                               Jones      Kenneth      $12.50    
+                               Morales    Bonita       $12.50    
+                               Morales    Bonita       $12.50    
+                               Pierson    Thomas       $12.50    
+Database Implementation        Giana      Tammy        $31.40    
+                               Lee        Jasmine      $31.40    
+                               Mcgovern   Reese        $31.40    
+                               Morales    Bonita       $31.40    
+                               Morales    Bonita       $31.40    
+                               Smith      Jennifer     $31.40    
+E-Business The Easy Way        Giana      Tammy        $37.90    
+                               Smith      Leila        $37.90    
+Handcranked Computers          Nelson     Becca        $21.80    
+Holy Grail Of Oracle           Giana      Tammy        $47.25    
+How To Manage The Manager      Lucas      Jake         $15.40    
+Painless Child-Rearing         Falah      Kenneth      $48.00    
+                               Lucas      Jake         $48.00    
+                               Lucas      Jake         $48.00    
+                               Nelson     Becca        $48.00    
+                               Smith      Leila        $48.00    
+Revenge Of Mickey              Giana      Tammy        $14.20    
+                               Girard     Cindy        $14.20    
+                               Montiasa   Greg         $14.20    
+                               Nelson     Becca        $14.20    
+Shortest Poems                 Montiasa   Greg         $21.85    
+
+
+
+
+
+                        Internal Use Only
+SQL> 
+SQL> -- Create file spool
+SQL> spool off

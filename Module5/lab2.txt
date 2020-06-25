@@ -1,0 +1,68 @@
+SQL> set ECHO on
+SQL> set LINESIZE 80
+SQL> set PAGESIZE 40
+SQL> 
+SQL> CLEAR COLUMNS
+SQL> CLEAR BREAKS
+SQL> 
+SQL> TTITLE CENTER 'Author / Title Information' SKIP -
+> CENTER 'Author Book Cost Evaluation' SKIP 2
+SQL> BTITLE 'Internal Use Only'
+SQL> 
+SQL> BREAK ON id SKIP 1 on name
+SQL> BREAK ON name SKIP 1 on report
+SQL> COMPUTE SUM LABEL 'Total Cost' of cost on name
+SQL> COMPUTE SUM LABEL 'Grand Total Cost' of cost on report
+SQL> COLUMN name HEADING 'Publisher|Name'
+SQL> COLUMN id FORMAT 99 HEADING 'ID'
+SQL> COLUMN title HEADING 'Book|Title'
+SQL> COLUMN cost FORMAT $9999.00 HEADING 'Book|Cost'
+SQL> 
+SQL> SELECT INITCAP(p.name) name, p.pubid id,
+  2  INITCAP(b.title) title, b.cost cost
+  3  FROM publisher p, books b
+  4  WHERE p.pubid = b.pubid
+  5  ORDER BY 1, 3;
+
+                           Author / Title Information                           
+                           Author Book Cost Evaluation                          
+                                                                                
+Publisher                   Book                                Book            
+Name                     ID Title                               Cost            
+----------------------- --- ------------------------------ ---------            
+American Publishing       3 Database Implementation           $31.40            
+                          3 Handcranked Computers             $21.80            
+                          3 Holy Grail Of Oracle              $47.25            
+***********************                                    ---------            
+Total Cost                                                   $100.45            
+                                                                                
+Printing Is Us            1 How To Manage The Manager         $15.40            
+                          1 Revenge Of Mickey                 $14.20            
+***********************                                    ---------            
+Total Cost                                                    $29.60            
+                                                                                
+Publish Our Way           2 Building A Car With Toothpicks    $37.80            
+                          2 E-Business The Easy Way           $37.90            
+***********************                                    ---------            
+Total Cost                                                    $75.70            
+                                                                                
+Reading Materials Inc.    4 Bodybuild In 10 Minutes A Day     $18.75            
+                          4 Cooking With Mushrooms            $12.50            
+                          4 How To Get Faster Pizza           $17.85            
+                          4 The Wok Way To Cook               $19.00            
+***********************                                    ---------            
+Total Cost                                                    $68.10            
+                                                                                
+Reed-N-Rite               5 Big Bear And Little Dove           $5.32            
+                          5 Painless Child-Rearing            $48.00            
+                          5 Shortest Poems                    $21.85            
+***********************                                    ---------            
+Total Cost                                                    $75.17            
+                                                                                
+                                                           ---------            
+Grand Total Cost                                             $349.02            
+
+                               Internal Use Only
+SQL> 
+SQL> -- Create file spool
+SQL> spool off

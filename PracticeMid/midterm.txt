@@ -1,0 +1,402 @@
+SQL> -- Part 2.1
+SQL> set echo on
+SQL> set linesize 132
+SQL> set pagesize 66
+SQL> CLEAR COLUMN
+SQL> CLEAR BREAK
+SQL> CLEAR title
+SP2-0158: unknown CLEAR option "title"
+SQL> 
+SQL> -- Part 2.1
+SQL> DESCRIBE course;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ COURSE_CODE                                                              NOT NULL VARCHAR2(9)
+ COURSE_TITLE                                                                      VARCHAR2(50)
+ HOURS                                                                             NUMBER(3)
+ CREDITS                                                                           NUMBER(3)
+ PREREQUISITE                                                                      VARCHAR2(9)
+
+SQL> SELECT * FROM course;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+COURSE_CO COURSE_TITLE                                            HOURS    CREDITS PREREQUIS                                        
+--------- -------------------------------------------------- ---------- ---------- ---------                                        
+ACCT210   Introductory Accounting                                    64          4                                                  
+ACCT240   Intermediate Accounting                                    80          5 ACCT210                                          
+MATH215   Calculus I                                                 80          5                                                  
+MATH235   Calculus II                                                80          5 MATH215                                          
+CMPP201   Introductory Programming                                  160          8                                                  
+COMP202   Computer Fundamentals                                      80          5                                                  
+CMPP230   Introduction to Fourth Generation Languages                80          5 CMPP201                                          
+CSYS325   Object Oriented Analysis                                   64          5 CMPP230                                          
+CSYS300   Information Systems I                                     128          8 CMPP230                                          
+CSYS350   Information Systems II                                    176         10 CSYS300                                          
+CSYS302   Technical Systems I                                       128          8 CMPP230                                          
+CSYS352   Technical Systems II                                      176         10 CSYS302                                          
+ENGL201   English Literature                                         80          5                                                  
+ENGL240   English Composition                                        80          5 ENGL201                                          
+PHYS211   Heat and Thermodynamics                                    64          5 MATH235                                          
+
+15 rows selected.
+
+SQL> 
+SQL> DESCRIBE expertise;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ EMPLOYEE_ID                                                              NOT NULL VARCHAR2(9)
+ COURSE_CODE                                                              NOT NULL VARCHAR2(9)
+ EXPERTISE_LEVEL                                                                   NUMBER(3)
+
+SQL> SELECT * FROM expertise;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+EMPLOYEE_ COURSE_CO EXPERTISE_LEVEL                                                                                                 
+--------- --------- ---------------                                                                                                 
+000030002 ACCT210                 9                                                                                                 
+002300123 ACCT210                 7                                                                                                 
+000018012 MATH215                 8                                                                                                 
+000018012 MATH235                 8                                                                                                 
+000018012 PHYS211                 7                                                                                                 
+000018012 ENGL201                 6                                                                                                 
+002300137 MATH235                 7                                                                                                 
+002300137 MATH215                 7                                                                                                 
+000296257 MATH215                 7                                                                                                 
+000296257 MATH235                 8                                                                                                 
+000296257 PHYS211                 7                                                                                                 
+000130006 CMPP230                 7                                                                                                 
+000012345 CSYS325                 8                                                                                                 
+000012346 CMPP201                 8                                                                                                 
+000030002 ENGL201                 5                                                                                                 
+000000001 PHYS211                10                                                                                                 
+000000011 ACCT240                 3                                                                                                 
+000000011 ACCT210                 2                                                                                                 
+000000006 COMP202                10                                                                                                 
+000130006 CSYS325                 7                                                                                                 
+000130006 CSYS300                 8                                                                                                 
+000130006 CSYS350                 7                                                                                                 
+000130006 CSYS302                 8                                                                                                 
+000000005 CSYS300                 3                                                                                                 
+
+24 rows selected.
+
+SQL> 
+SQL> DESCRIBE faculty;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ EMPLOYEE_ID                                                              NOT NULL VARCHAR2(9)
+ SURNAME                                                                           VARCHAR2(30)
+ FIRSTNAME                                                                         VARCHAR2(30)
+ BIRTHDATE                                                                         DATE
+ SENIORITY_DATE                                                                    DATE
+ SALARY                                                                            NUMBER(8,2)
+ UNIT                                                                              NUMBER(3)
+
+SQL> SELECT * FROM faculty;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+EMPLOYEE_ SURNAME                        FIRSTNAME                      BIRTHDATE SENIORITY     SALARY       UNIT                   
+--------- ------------------------------ ------------------------------ --------- --------- ---------- ----------                   
+000000001 Curie                          Marie                          01-JUL-80 01-SEP-08      49000        100                   
+000000002 Sienko                         Michael                        04-MAY-75 03-AUG-06      49500        100                   
+000000003 Plane                          Robert                         08-SEP-69 01-AUG-97      50000        130                   
+000000004 Zuwaylif                       Fadil                          14-FEB-66 15-AUG-01      49200        110                   
+001132027 Hilbert                        Harry                          08-SEP-90 01-SEP-14      47200        110                   
+001132028 Rodrigues                      Carlos                         31-MAR-88 01-JUL-13      45000        110                   
+001132029 James                          Julie                          17-MAR-70 01-AUG-12      45500        120                   
+000000005 MacLeod                        Edward                         01-JAN-80 05-JUL-04      49700        140                   
+000000006 Fences                         William                        06-APR-88 06-JUL-05      50000        140                   
+000000010 Jonas                          Georgette                      12-NOV-65 17-AUG-90      52000                              
+000000011 James                          Clifford                       08-SEP-69 01-JUN-98      52000                              
+000012345 Ullman                         Joseph                         03-DEC-80 01-SEP-01      47000        100                   
+000012000 Taylor                         Ted                            31-DEC-90 01-SEP-14      30000        100                   
+000012346 Lee                            Peter                          23-APR-92 30-AUG-15      41500        141                   
+000012357 Hopper                         Grace                          07-FEB-74 31-JUL-98      47000                              
+000030002 Minsky                         Marvin                         09-MAR-82 15-AUG-10      42000        310                   
+000130006 Faure                          Penelope                       31-MAR-90 10-AUG-14      47500        140                   
+000220159 Winch                          Graham                         16-AUG-92 01-APR-15      39000        200                   
+000012065 Boyce                          Elaine                         24-JAN-73 01-SEP-98      43200        143                   
+002300123 Lee                            Douglas                        30-MAY-61 01-SEP-93      48000        300                   
+002300137 Reid                           David                          03-SEP-79 28-AUG-05      46900        100                   
+000018012 Sparks                         Christopher                    07-DEC-71 15-AUG-00      46000        110                   
+000296257 Longley                        Marcia                         01-JUN-90 03-AUG-13      46500        110                   
+
+23 rows selected.
+
+SQL> 
+SQL> DESCRIBE class_section;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ COURSE_CODE                                                              NOT NULL VARCHAR2(9)
+ SECTION_CODE                                                             NOT NULL VARCHAR2(3)
+ SEMESTER                                                                 NOT NULL VARCHAR2(3)
+ YEAR                                                                     NOT NULL VARCHAR2(4)
+ INSTRUCTOR_ID                                                                     VARCHAR2(9)
+ CAPACITY                                                                          NUMBER(3)
+ ENROLMENT                                                                         NUMBER(3)
+
+SQL> SELECT * FROM class_section;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+COURSE_CO SEC SEM YEAR INSTRUCTO   CAPACITY  ENROLMENT                                                                              
+--------- --- --- ---- --------- ---------- ----------                                                                              
+ACCT210   1FB 1   2014 000030002         35          1                                                                              
+ACCT210   1FC 1   2014 002300123         35          2                                                                              
+ACCT210   1WA 2   2014 000030002         40          0                                                                              
+ACCT210   1WB 2   2014 000030002         35          0                                                                              
+MATH215   1FB 1   2014 002300137         30          3                                                                              
+MATH215   1FC 1   2014 000018012         25          0                                                                              
+MATH215   1FB 1   2013 002300137         28          3                                                                              
+MATH215   1WA 2   2014 000296257         35          0                                                                              
+MATH215   1WB 2   2014 000018012         30          0                                                                              
+MATH235   1FC 2   2014 000296257         35          4                                                                              
+CMPP230   1FC 1   2014 000130006         40          5                                                                              
+CMPP230   1FB 1   2014 000130006         40          0                                                                              
+CSYS325   2FB 2   2014 000012345         10          1                                                                              
+CMPP201   1FC 1   2014 000012346         40          3                                                                              
+PHYS211   1FB 2   2013 000000001         20          6                                                                              
+ENGL201   1WA 1   2014 000220159         30          2                                                                              
+MATH235   1FA 2   2013 000018012         20          3                                                                              
+CMPP201   1FA 2   2013 000012346         35          0                                                                              
+COMP202   1FA 2   2013 000000006         35          1                                                                              
+MATH235   1FA 2   2014 002300137         30          1                                                                              
+MATH235   1FA 1   2014 002300137         30          1                                                                              
+
+21 rows selected.
+
+SQL> 
+SQL> DESCRIBE course_registration;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ STUDENT_ID                                                               NOT NULL VARCHAR2(9)
+ COURSE_CODE                                                              NOT NULL VARCHAR2(9)
+ SECTION                                                                  NOT NULL VARCHAR2(3)
+ SEMESTER                                                                 NOT NULL VARCHAR2(3)
+ YEAR                                                                     NOT NULL VARCHAR2(4)
+ GRADE                                                                             NUMBER(3)
+
+SQL> SELECT * FROM course_registration;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+STUDENT_I COURSE_CO SEC SEM YEAR      GRADE                                                                                         
+--------- --------- --- --- ---- ----------                                                                                         
+000612345 CMPP230   1FC 1   2014         82                                                                                         
+000811111 CMPP230   1FC 1   2014         66                                                                                         
+002502060 CMPP230   1FC 1   2014         66                                                                                         
+000600189 PHYS211   1FB 2   2013         80                                                                                         
+000600189 MATH235   1FC 2   2014                                                                                                    
+000612345 CSYS325   2FB 2   2014                                                                                                    
+000509082 PHYS211   1FB 2   2013         58                                                                                         
+000811111 ACCT210   1FC 1   2014         93                                                                                         
+000509082 MATH215   1FB 1   2013         49                                                                                         
+000509082 MATH215   1FB 1   2014         45                                                                                         
+001500026 ACCT210   1FB 1   2014         65                                                                                         
+001500026 CMPP201   1FC 1   2014         66                                                                                         
+001500026 CMPP230   1FC 1   2014         78                                                                                         
+002502060 ENGL201   1WA 1   2014         41                                                                                         
+002502060 ACCT210   1FC 1   2014         66                                                                                         
+000427358 CMPP230   1FC 1   2014         69                                                                                         
+000600352 MATH235   1FC 2   2014                                                                                                    
+000600352 ENGL201   1WA 1   2014         87                                                                                         
+000600352 PHYS211   1FB 2   2013         89                                                                                         
+000612345 MATH215   1FB 1   2014         68                                                                                         
+000612345 PHYS211   1FB 2   2013         71                                                                                         
+000811111 CMPP201   1FC 1   2014         78                                                                                         
+000427358 CMPP201   1FC 1   2014         63                                                                                         
+000427358 MATH215   1FB 1   2013         82                                                                                         
+000427358 MATH235   1FA 2   2013         71                                                                                         
+000427358 PHYS211   1FB 2   2013         65                                                                                         
+000427358 COMP202   1FA 2   2013         92                                                                                         
+002502060 MATH235   1FC 2   2014         42                                                                                         
+000612345 MATH235   1FA 2   2013         40                                                                                         
+000612345 MATH235   1FC 2   2014         35                                                                                         
+000612345 MATH235   1FA 1   2014         40                                                                                         
+001500026 PHYS211   1FB 2   2013         48                                                                                         
+001500026 MATH215   1FB 1   2013         32                                                                                         
+001500026 MATH215   1FB 1   2014         38                                                                                         
+000811111 MATH235   1FA 2   2013         41                                                                                         
+000811111 MATH235   1FA 2   2014         45                                                                                         
+
+36 rows selected.
+
+SQL> 
+SQL> DESCRIBE student;
+ Name                                                                     Null?    Type
+ ------------------------------------------------------------------------ -------- -------------------------------------------------
+ STUDENT_ID                                                               NOT NULL VARCHAR2(9)
+ SURNAME                                                                           VARCHAR2(30)
+ FIRSTNAME                                                                         VARCHAR2(30)
+ BIRTHDATE                                                                         DATE
+ GENDER                                                                            VARCHAR2(1)
+ PROGRAM_OF_STUDIES                                                                VARCHAR2(25)
+
+SQL> SELECT * FROM student;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+STUDENT_I SURNAME                        FIRSTNAME                      BIRTHDATE G PROGRAM_OF_STUDIES                              
+--------- ------------------------------ ------------------------------ --------- - -------------------------                       
+000612345 Adler                          Philip                         28-FEB-80 M Computer Technology                             
+000600189 Jenkins                        Dorothy                        16-AUG-92 F Power Engineering                               
+000600201 Caine                          John                           31-MAR-95 M Computer Technology                             
+000600352 Lorieaux                       Marie                          01-MAY-96 F Petroleum Engineering                           
+000509082 Hagenson                       Nels                           30-MAY-88 M Petroleum Engineering                           
+000710000 Wells                          George                         25-DEC-90 M Computer Technology                             
+000427358 Wells                          Georgette                      09-MAR-94 F Computer Technology                             
+000811111 Ng                             Ruth                           03-JUL-97 F Business Administration                         
+001500026 Durbin                         Deanna                         06-JUN-91 F Business Administration                         
+002502060 Bryce                          Robert                         20-SEP-87 M Business Administration                         
+
+10 rows selected.
+
+SQL> 
+SQL> -- Part 3
+SQL> SELECT course_title, credits, firstname, surname
+  2  FROM course NATURAL JOIN expertise NATURAL JOIN faculty
+  3  WHERE course_code LIKE 'CSYS%';
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+COURSE_TITLE                                          CREDITS FIRSTNAME                      SURNAME                                
+-------------------------------------------------- ---------- ------------------------------ ------------------------------         
+Information Systems I                                       8 Edward                         MacLeod                                
+Information Systems I                                       8 Penelope                       Faure                                  
+Technical Systems I                                         8 Penelope                       Faure                                  
+Object Oriented Analysis                                    5 Joseph                         Ullman                                 
+Object Oriented Analysis                                    5 Penelope                       Faure                                  
+Information Systems II                                     10 Penelope                       Faure                                  
+
+6 rows selected.
+
+SQL> 
+SQL> -- Part 4
+SQL> SELECT course_title
+  2  FROM COURSE
+  3  WHERE prerequisite
+  4  IS NOT NULL;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+COURSE_TITLE                                                                                                                        
+--------------------------------------------------                                                                                  
+Intermediate Accounting                                                                                                             
+Calculus II                                                                                                                         
+Introduction to Fourth Generation Languages                                                                                         
+Object Oriented Analysis                                                                                                            
+Information Systems I                                                                                                               
+Information Systems II                                                                                                              
+Technical Systems I                                                                                                                 
+Technical Systems II                                                                                                                
+English Composition                                                                                                                 
+Heat and Thermodynamics                                                                                                             
+
+10 rows selected.
+
+SQL> 
+SQL> -- Part 5
+SQL> SELECT TO_CHAR(AVG(grade), '99.99')
+  2  FROM course_registration;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+TO_CHA                                                                                                                              
+------                                                                                                                              
+ 62.15                                                                                                                              
+
+SQL> 
+SQL> -- Part 5.2
+SQL> SELECT SUM(salary)
+  2  FROM faculty
+  3  GROUP BY unit
+  4  HAVING SUM(salary) > 50000;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+SUM(SALARY)                                                                                                                         
+-----------                                                                                                                         
+     233900                                                                                                                         
+     147200                                                                                                                         
+     151000                                                                                                                         
+     222400                                                                                                                         
+
+SQL> 
+SQL> -- Part 6
+SQL> SELECT firstname, surname, grade, grade.avg
+  2  FROM course_registration NATURAL JOIN student,
+  3  (SELECT TO_CHAR(AVG(grade), '99.99') avg
+  4  				     FROM course_registration) grade
+  5  WHERE grade < grade.avg;
+
+                                                        Class Capacity Report                                                       
+                                                                                                                                    
+FIRSTNAME                      SURNAME                             GRADE AVG                                                        
+------------------------------ ------------------------------ ---------- ------                                                     
+Nels                           Hagenson                               58  62.15                                                     
+Nels                           Hagenson                               49  62.15                                                     
+Nels                           Hagenson                               45  62.15                                                     
+Robert                         Bryce                                  41  62.15                                                     
+Robert                         Bryce                                  42  62.15                                                     
+Philip                         Adler                                  40  62.15                                                     
+Philip                         Adler                                  35  62.15                                                     
+Philip                         Adler                                  40  62.15                                                     
+Deanna                         Durbin                                 48  62.15                                                     
+Deanna                         Durbin                                 32  62.15                                                     
+Deanna                         Durbin                                 38  62.15                                                     
+Ruth                           Ng                                     41  62.15                                                     
+Ruth                           Ng                                     45  62.15                                                     
+
+13 rows selected.
+
+SQL> 
+SQL> -- Part 7
+SQL> SET LINESIZE 55;
+SQL> TTITLE CENTER 'Class Capacity Report' SKIP 2
+SQL> 
+SQL> BREAK ON course_code SKIP 1
+SQL> BREAK ON course_code SKIP 1 on report
+SQL> COMPUTE SUM LABEL 'Course Cap' of SUM(capacity)  on course_code
+SQL> COMPUTE SUM LABEL 'Grand Cap.' of SUM(capacity)  on report
+SQL> 
+SQL> COLUMN course_code HEADING 'Course|Code'
+SQL> COLUMN semester FORMAT A10 HEADING 'Semester'
+SQL> COLUMN SUM(capacity)  HEADING 'Capacity|Calue'
+SQL> 
+SQL> 
+SQL> SELECT course_code, semester, SUM(capacity)
+  2  FROM class_section
+  3  GROUP BY (course_code, semester)
+  4  HAVING SUM(capacity) >= 75
+  5  ORDER BY course_code;
+
+                 Class Capacity Report                 
+                                                       
+Course                 Capacity                        
+Code      Semester        Calue                        
+--------- ---------- ----------                        
+ACCT210   2                  75                        
+*********            ----------                        
+Course Ca                    75                        
+                                                       
+CMPP230   1                  80                        
+*********            ----------                        
+Course Ca                    80                        
+                                                       
+MATH215   1                  83                        
+*********            ----------                        
+Course Ca                    83                        
+                                                       
+MATH235   2                  85                        
+*********            ----------                        
+Course Ca                    85                        
+                                                       
+                     ----------                        
+Grand Cap                   323                        
+
+SQL> 
+SQL> -- Create a file
+SQL> SPOOL OFF

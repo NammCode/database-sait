@@ -1,0 +1,91 @@
+SQL> 
+SQL> -- Question 1
+SQL> INSERT INTO customers
+  2  VALUES(1022,'Ton','Tran','P.O BOX 138','CALGARY','CA',32300,NULL,'SE','aaa@sait.net');
+
+1 row created.
+
+SQL> 
+SQL> -- Question 2
+SQL> INSERT INTO orders (order#,customer#,orderdate,shipdate,shipstreet,shipcity,shipstate,shipcost)
+  2  VALUES (1022, 1022, SYSDATE, SYSDATE+4, '136 FRANNKLIN ROB', 'CALGARY', 'FL', 3);
+
+1 row created.
+
+SQL> 
+SQL> -- Question 3
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> -- Question 4
+SQL> UPDATE books
+  2  SET retail = retail * 0.9
+  3  WHERE category = (SELECT category
+  4  				       FROM books
+  5  				       WHERE ISBN = 4981341710);
+
+2 rows updated.
+
+SQL> 
+SQL> -- Question 5
+SQL> DELETE author
+  2  WHERE authorid IN (SELECT authorid
+  3  					FROM author
+  4  					WHERE authorid NOT IN (SELECT authorid
+  5  										       FROM bookauthor
+  6  										       GROUP BY authorid));
+
+2 rows deleted.
+
+SQL> 
+SQL> SELECT * FROM author ORDER BY authorid;
+
+AUTH LNAME      FNAME                                                                                                               
+---- ---------- ----------                                                                                                          
+A100 AUSTIN     JAMES                                                                                                               
+A105 ADAMS      JUAN                                                                                                                
+B100 BAKER      JACK                                                                                                                
+F100 FIELDS     OSCAR                                                                                                               
+J100 JONES      JANICE                                                                                                              
+K100 KZOCHSKY   TAMARA                                                                                                              
+P100 PORTER     LISA                                                                                                                
+P105 PETERSON   TINA                                                                                                                
+R100 ROBINSON   ROBERT                                                                                                              
+S100 SMITH      SAM                                                                                                                 
+W100 WHITE      WILLIAM                                                                                                             
+W105 WHITE      LISA                                                                                                                
+
+12 rows selected.
+
+SQL> 
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> 
+SQL> SELECT * FROM author ORDER BY authorid;
+
+AUTH LNAME      FNAME                                                                                                               
+---- ---------- ----------                                                                                                          
+A100 AUSTIN     JAMES                                                                                                               
+A105 ADAMS      JUAN                                                                                                                
+B100 BAKER      JACK                                                                                                                
+F100 FIELDS     OSCAR                                                                                                               
+J100 JONES      JANICE                                                                                                              
+K100 KZOCHSKY   TAMARA                                                                                                              
+M100 MARTINEZ   SHEILA                                                                                                              
+P100 PORTER     LISA                                                                                                                
+P105 PETERSON   TINA                                                                                                                
+R100 ROBINSON   ROBERT                                                                                                              
+S100 SMITH      SAM                                                                                                                 
+W100 WHITE      WILLIAM                                                                                                             
+W105 WHITE      LISA                                                                                                                
+W110 WILKINSON  ANTHONY                                                                                                             
+
+14 rows selected.
+
+SQL> 
+SQL> -- Create file spool
+SQL> spool off

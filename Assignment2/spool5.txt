@@ -1,0 +1,166 @@
+SQL> 
+SQL> -- Question 1
+SQL> COLUMN "Full Name" FORMAT A30;
+SQL> 
+SQL> SELECT first_name || ' ' || middle_name || ' ' || surname "Full name",
+  2  balance,
+  3  CASE WHEN balance = 0 THEN 'Zero balance'
+  4  	      WHEN balance >= 1 AND balance <= 1000 THEN 'Low Balance' || ' in ' || account_description
+  5  	      WHEN balance >= 1001 AND balance <= 5000 THEN 'Intermediate Balance' || ' in ' || account_description
+  6  	      WHEN balance >= 5000 THEN 'High Balance' || ' in ' || account_description
+  7  	      END "Balance Level"
+  8  FROM wgb_customer NATURAL JOIN wgb_account
+  9  NATURAL JOIN wgb_account_type
+ 10  ORDER BY first_name, middle_name, surname ASC, balance DESC;
+
+Full name                         BALANCE Balance Level                                                                             
+------------------------------ ---------- -----------------------------------------------------------                               
+Byron Allen Griffith                10000 High Balance in Monthly Minimum Balance Savings                                           
+Henri Dumont Poincare                2000 Intermediate Balance in RRSP's                                                            
+Henri Dumont Poincare              565.23 Low Balance in Chequing                                                                   
+Henri Dumont Poincare                 200 Low Balance in Daily Interest Savings                                                     
+John L. Synge                      6433.5 High Balance in Chequing                                                                  
+John L. Synge                     2999.76 Intermediate Balance in Daily Interest Savings                                            
+Patricia  Lee                         500 Low Balance in Chequing                                                                   
+Peter C. Chen                        5000 Intermediate Balance in GIC's                                                             
+Peter C. Chen                         700 Low Balance in RRSP's                                                                     
+Peter C. Chen                           0 Zero balance                                                                              
+
+10 rows selected.
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Question 2
+SQL> COLUMN account_type FORMAT 9 HEADING 'Acct|Type';
+SQL> COLUMN balance FORMAT $99,999.00 HEADING 'Largest|Balance';
+SQL> 
+SQL> SELECT first_name "First",
+  2  surname "Last",
+  3  '(403) ' || '' || TO_CHAR(phone, '999,99,99') "Phone number",
+  4  customer_number "Acct #",
+  5  account_type,
+  6  balance
+  7  FROM wgb_customer NATURAL JOIN wgb_account
+  8  NATURAL JOIN wgb_account_type
+  9  WHERE (account_type, balance) IN (SELECT account_type,
+ 10  								       MAX(balance)
+ 11  								       FROM wgb_account NATURAL JOIN wgb_account_type
+ 12  								       GROUP BY account_type)
+ 13  ORDER BY account_type, first_name, surname;
+
+                                                                        Acct     Largest                                            
+First                Last                      Phone number     Acct #  Type     Balance                                            
+-------------------- ------------------------- ---------------- ------- ---- -----------                                            
+John                 Synge                     (403)  521,00,01 1112401    1   $6,433.50                                            
+John                 Synge                     (403)  521,00,01 1112401    2   $2,999.76                                            
+Byron                Griffith                  (403)  633,21,12 1113004    3  $10,000.00                                            
+Henri                Poincare                  (403)  727,40,36 1113501    4   $2,000.00                                            
+Peter                Chen                      (403)  652,01,28 2566217    5   $5,000.00                                            
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Question 3
+SQL> COLUMN account_type FORMAT 9 HEADING 'Acct|Type';
+SQL> COLUMN balance FORMAT $99,999.00 HEADING 'Largest|Balance';
+SQL> 
+SQL> SELECT c.first_name "First",
+  2  c.surname "Last",
+  3  '(403) ' || '' || TO_CHAR(c.phone, '999,99,99') "Phone number",
+  4  c.customer_number "Acct #",
+  5  a.account_type,
+  6  a.balance
+  7  FROM wgb_customer c, wgb_account a, wgb_account_type t
+  8  WHERE c.customer_number = a.customer_number
+  9  AND a.account_type = t.account_type
+ 10  AND a.balance =  (SELECT MAX(balance)
+ 11  				       FROM wgb_account a2
+ 12  				       WHERE a2.account_type = t.account_type)
+ 13  ORDER BY a.account_type;
+
+                                                                        Acct     Largest                                            
+First                Last                      Phone number     Acct #  Type     Balance                                            
+-------------------- ------------------------- ---------------- ------- ---- -----------                                            
+John                 Synge                     (403)  521,00,01 1112401    1   $6,433.50                                            
+John                 Synge                     (403)  521,00,01 1112401    2   $2,999.76                                            
+Byron                Griffith                  (403)  633,21,12 1113004    3  $10,000.00                                            
+Henri                Poincare                  (403)  727,40,36 1113501    4   $2,000.00                                            
+Peter                Chen                      (403)  652,01,28 2566217    5   $5,000.00                                            
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Question 4
+SQL> COLUMN "Full name" FORMAT A20;
+SQL> COLUMN "Full address" FORMAT A30;
+SQL> 
+SQL> SELECT UPPER(c.surname) || ', ' || c.first_name "Full name",
+  2  	    c.address1 || ', ' || UPPER(c.city) || ', ' || c.province "Full address",
+  3  		TO_CHAR(c.date_entered, 'MON/YY') "Date entered",
+  4  		s.active "# of accounts",
+  5  		ROWNUM "Position"
+  6  FROM wgb_customer c JOIN (SELECT customer_number, COUNT(*) active
+  7  						     FROM wgb_transaction
+  8  						     GROUP BY customer_number) s USING (customer_number)
+  9  ORDER BY s.active DESC
+ 10  FETCH FIRST 2 ROWS ONLY;
+
+Full name            Full address                   Date entered    # of accounts   Position                                        
+-------------------- ------------------------------ --------------- ------------- ----------                                        
+SYNGE, John          Apt 201, HARRISON, AB          JAN/19                     11          1                                        
+POINCARE, Henri      Box 5, EYEBROW, SK             SEP/16                      9          2                                        
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Question 5
+SQL> COLUMN transaction_date FORMAT A12 HEADING 'Trans. date';
+SQL> COLUMN "Total" FORMAT $9,999.00;
+SQL> 
+SQL> SELECT first_name "First name",
+  2  	    surname "Last name",
+  3  		transaction_date,
+  4  		TO_CHAR(transaction_amount, '9,999.99') "Transaction amount",
+  5  		SUM(transaction_amount) "Total"
+  6  FROM wgb_customer NATURAL JOIN wgb_transaction
+  7  WHERE address2 IS NULL
+  8  GROUP BY ROLLUP ((first_name, surname), transaction_date, transaction_amount)
+  9  ORDER BY first_name, transaction_date, transaction_amount;
+
+First name           Last name                 Trans. date  Transacti      Total                                                    
+-------------------- ------------------------- ------------ --------- ----------                                                    
+Henri                Poincare                  02-JAN-19     1,100.00  $1,100.00                                                    
+Henri                Poincare                  02-JAN-19               $1,100.00                                                    
+Henri                Poincare                  11-JAN-19       115.00    $115.00                                                    
+Henri                Poincare                  11-JAN-19                 $115.00                                                    
+Henri                Poincare                  15-JAN-19        40.00     $80.00                                                    
+Henri                Poincare                  15-JAN-19       120.00    $120.00                                                    
+Henri                Poincare                  15-JAN-19     2,000.00  $2,000.00                                                    
+Henri                Poincare                  15-JAN-19               $2,200.00                                                    
+Henri                Poincare                  22-JAN-19       135.28    $135.28                                                    
+Henri                Poincare                  22-JAN-19                 $135.28                                                    
+Henri                Poincare                  28-JAN-19     1,439.55  $1,439.55                                                    
+Henri                Poincare                  28-JAN-19               $1,439.55                                                    
+Henri                Poincare                  29-JAN-19       135.28    $135.28                                                    
+Henri                Poincare                  29-JAN-19                 $135.28                                                    
+Henri                Poincare                                          $5,125.11                                                    
+Peter                Chen                      02-JAN-19        60.00     $60.00                                                    
+Peter                Chen                      02-JAN-19     1,000.00  $1,000.00                                                    
+Peter                Chen                      02-JAN-19               $1,060.00                                                    
+Peter                Chen                      09-JAN-19        60.00     $60.00                                                    
+Peter                Chen                      09-JAN-19                  $60.00                                                    
+Peter                Chen                      16-JAN-19        60.00     $60.00                                                    
+Peter                Chen                      16-JAN-19                  $60.00                                                    
+Peter                Chen                      23-JAN-19        60.00     $60.00                                                    
+Peter                Chen                      23-JAN-19                  $60.00                                                    
+Peter                Chen                                              $1,240.00                                                    
+                                                                       $6,365.11                                                    
+
+26 rows selected.
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Upload
+SQL> spool off

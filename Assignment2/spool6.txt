@@ -1,0 +1,143 @@
+SQL> 
+SQL> SET echo ON;
+SQL> SET linesize 110;
+SQL> SET pagesize 50;
+SQL> 
+SQL> COLUMN "Name" FORMAT A20;
+SQL> COLUMN "Cust#" FORMAT A15;
+SQL> COLUMN "Account Desc" FORMAT A25;
+SQL> COLUMN "Date" FORMAT A20;
+SQL> COLUMN "Amount" FORMAT $99,999.00;
+SQL> 
+SQL> TTITLE CENTER 'Transaction Report' SKIP -
+> RIGHT 'Page: ' FORMAT 9 SQL.PNO SKIP 2
+SQL> BTITLE CENTER 'For Internal Use Only'
+SQL> 
+SQL> BREAK ON "Name" SKIP 3 ON "Cust#" SKIP 2 ON "Account Desc" SKIP 1 ON report;
+SQL> 
+SQL> COMPUTE SUM LABEL 'Acct Ttl' of "Amount" on "Cust#";
+SQL> COMPUTE SUM LABEL 'Cust Ttl' of "Amount" on "Name";
+SQL> COMPUTE SUM LABEL 'Grand Total' of "Amount" on report;
+SQL> COMPUTE MAX LABEL 'Ttl Transactions' of "Trans #" on report;
+SQL> 
+SQL> SELECT surname || ', ' || first_name "Name",
+  2  	    customer_number || '-' || account_type "Cust#",
+  3  		account_description "Account Desc",
+  4  		TO_CHAR(transaction_date, 'MON/DD, YYYY') "Date",
+  5  		transaction_number "Trans #",
+  6  		CASE WHEN transaction_type = 'D' THEN 0 - transaction_amount
+  7  		     WHEN transaction_type = 'C' THEN transaction_amount
+  8  			 END  "Amount"
+  9  FROM wgb_customer NATURAL JOIN wgb_account
+ 10  				       NATURAL JOIN wgb_account_type
+ 11  				       NATURAL JOIN wgb_transaction
+ 12  ORDER  BY 2, 3, 4;
+
+                                              Transaction Report                                              
+                                                                                                      Page:  1
+                                                                                                              
+Name                 Cust#           Account Desc              Date                    Trans #      Amount    
+-------------------- --------------- ------------------------- -------------------- ---------- -----------    
+Synge, John          1112401-1       Chequing                  JAN/01, 2019                  1    -$159.27    
+                                                               JAN/02, 2019                  2    -$425.76    
+                                                               JAN/02, 2019                  3    -$226.00    
+                                                               JAN/06, 2019                  4      $40.00    
+                                                               JAN/15, 2019                  5   $1,895.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                    $1,123.97    
+                                                                                                              
+                                                                                                              
+                     1112401-2       Daily Interest Savings    JAN/02, 2019                  6      $60.00    
+                                                               JAN/06, 2019                  7      $73.00    
+                                                               JAN/07, 2019                  8     -$12.17    
+                                                               JAN/31, 2019                  9        $.22    
+                                                               JAN/31, 2019                 10   $1,065.00    
+                                                               JAN/31, 2019                 11     $565.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                    $1,751.05    
+                                                                                                              
+                                                                                                              
+********************                                                                           -----------    
+Cust Ttl                                                                                         $2,875.02    
+                                                                                                              
+                                                                                                              
+                                                                                                              
+Poincare, Henri      1113501-1       Chequing                  JAN/02, 2019                 12  -$1,100.00    
+                                                               JAN/11, 2019                 13    -$115.00    
+                                                               JAN/15, 2019                 18     -$40.00    
+                                                               JAN/15, 2019                 14   $2,000.00    
+                                                               JAN/22, 2019                 15    -$135.28    
+                                                               JAN/28, 2019                 16  -$1,439.55    
+                                                               JAN/29, 2019                 17     $135.28    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                     -$694.55    
+                                                                                                              
+                                                                                                              
+                     1113501-2       Daily Interest Savings    JAN/15, 2019                 19      $40.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                       $40.00    
+                                                                                                              
+                                             For Internal Use Only                                            
+
+                                              Transaction Report                                              
+                                                                                                      Page:  2
+                                                                                                              
+Name                 Cust#           Account Desc              Date                    Trans #      Amount    
+-------------------- --------------- ------------------------- -------------------- ---------- -----------    
+                                                                                                              
+Poincare, Henri      1113501-4       RRSP's                    JAN/15, 2019                 20     $120.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                      $120.00    
+                                                                                                              
+                                                                                                              
+********************                                                                           -----------    
+Cust Ttl                                                                                          -$534.55    
+                                                                                                              
+                                                                                                              
+                                                                                                              
+Chen, Peter          2566217-4       RRSP's                    JAN/02, 2019                 21      $60.00    
+                                                               JAN/09, 2019                 22      $60.00    
+                                                               JAN/16, 2019                 23      $60.00    
+                                                               JAN/23, 2019                 24      $60.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                      $240.00    
+                                                                                                              
+                                                                                                              
+                     2566217-5       GIC's                     JAN/02, 2019                 25   $1,000.00    
+                                                                                                              
+                     *************** *************************                                 -----------    
+                     Acct Ttl                                                                    $1,000.00    
+                                                                                                              
+                                                                                                              
+********************                                                                           -----------    
+Cust Ttl                                                                                         $1,240.00    
+                                                                                                              
+                                                                                                              
+                                                                                                              
+                                                                                    ---------- -----------    
+Ttl Transactions                                                                            25                
+Grand Total                                                                                      $3,580.47    
+
+
+
+
+
+
+
+
+                                             For Internal Use Only                                            
+
+25 rows selected.
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> CLEAR BREAK;
+SQL> 
+SQL> -- Upload
+SQL> spool off

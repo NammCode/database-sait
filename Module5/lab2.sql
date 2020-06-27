@@ -16,7 +16,6 @@ TTITLE CENTER 'Author / Title Information' SKIP -
 CENTER 'Author Book Cost Evaluation' SKIP 2
 BTITLE 'Internal Use Only'
 
-BREAK ON id SKIP 1 on name
 BREAK ON name SKIP 1 on report
 COMPUTE SUM LABEL 'Total Cost' of cost on name
 COMPUTE SUM LABEL 'Grand Total Cost' of cost on report

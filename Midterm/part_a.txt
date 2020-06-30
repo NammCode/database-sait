@@ -1,0 +1,192 @@
+SQL> 
+SQL> set echo on
+SQL> set linesize 132
+SQL> set pagesize 66
+SQL> 
+SQL> -- Part A
+SQL> -- Question 1
+SQL> SELECT MAX(capacity) AS "Highest No.of Students"
+  2  FROM class_section;
+
+Highest No.of Students                                                                                                              
+----------------------                                                                                                              
+                    40                                                                                                              
+
+SQL> 
+SQL> -- Question 2
+SQL> COLUMN "Name" FORMAT A20;
+SQL> COLUMN "Seniority" FORMAT A20;
+SQL> 
+SQL> SELECT
+  2  employee_id "EmpID",
+  3  surname || ', ' || firstname "Name",
+  4  TO_CHAR(seniority_date, 'Month DD,YYYY') "Seniority",
+  5  unit
+  6  FROM faculty
+  7  WHERE unit IS NOT NULL
+  8  ORDER BY 2 DESC;
+
+EmpID     Name                 Seniority                  UNIT                                                                      
+--------- -------------------- -------------------- ----------                                                                      
+000000004 Zuwaylif, Fadil      August    15,2001           110                                                                      
+000220159 Winch, Graham        April     01,2015           200                                                                      
+000012345 Ullman, Joseph       September 01,2001           100                                                                      
+000012000 Taylor, Ted          September 01,2014           100                                                                      
+000018012 Sparks, Christopher  August    15,2000           110                                                                      
+000000002 Sienko, Michael      August    03,2006           100                                                                      
+001132028 Rodrigues, Carlos    July      01,2013           110                                                                      
+002300137 Reid, David          August    28,2005           100                                                                      
+000000003 Plane, Robert        August    01,1997           130                                                                      
+000030002 Minsky, Marvin       August    15,2010           310                                                                      
+000000005 MacLeod, Edward      July      05,2004           140                                                                      
+000296257 Longley, Marcia      August    03,2013           110                                                                      
+000012346 Lee, Peter           August    30,2015           141                                                                      
+002300123 Lee, Douglas         September 01,1993           300                                                                      
+001132029 James, Julie         August    01,2012           120                                                                      
+001132027 Hilbert, Harry       September 01,2014           110                                                                      
+000000006 Fences, William      July      06,2005           140                                                                      
+000130006 Faure, Penelope      August    10,2014           140                                                                      
+000000001 Curie, Marie         September 01,2008           100                                                                      
+000012065 Boyce, Elaine        September 01,1998           143                                                                      
+
+20 rows selected.
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Question 3
+SQL> SELECT firstname,
+  2  surname,
+  3  TO_CHAR(birthdate, 'MON DD,YYYY') "Date"
+  4  FROM student
+  5  ORDER BY surname, firstname;
+
+FIRSTNAME                      SURNAME                        Date                                                                  
+------------------------------ ------------------------------ --------------------                                                  
+Philip                         Adler                          FEB 28,1980                                                           
+Robert                         Bryce                          SEP 20,1987                                                           
+John                           Caine                          MAR 31,1995                                                           
+Deanna                         Durbin                         JUN 06,1991                                                           
+Nels                           Hagenson                       MAY 30,1988                                                           
+Dorothy                        Jenkins                        AUG 16,1992                                                           
+Marie                          Lorieaux                       MAY 01,1996                                                           
+Ruth                           Ng                             JUL 03,1997                                                           
+George                         Wells                          DEC 25,1990                                                           
+Georgette                      Wells                          MAR 09,1994                                                           
+
+10 rows selected.
+
+SQL> 
+SQL> -- Question 4
+SQL> SELECT TO_CHAR(AVG(grade), '99.99') "Average"
+  2  FROM course_registration;
+
+Averag                                                                                                                              
+------                                                                                                                              
+ 62.15                                                                                                                              
+
+SQL> 
+SQL> -- Question 5
+SQL> SELECT firstname, surname, expertise_level
+  2  FROM faculty NATURAL JOIN expertise
+  3  WHERE expertise_level >= 2
+  4  ORDER BY firstname, surname;
+
+FIRSTNAME                      SURNAME                        EXPERTISE_LEVEL                                                       
+------------------------------ ------------------------------ ---------------                                                       
+Christopher                    Sparks                                       6                                                       
+Christopher                    Sparks                                       7                                                       
+Christopher                    Sparks                                       8                                                       
+Christopher                    Sparks                                       8                                                       
+Clifford                       James                                        2                                                       
+Clifford                       James                                        3                                                       
+David                          Reid                                         7                                                       
+David                          Reid                                         7                                                       
+Douglas                        Lee                                          7                                                       
+Edward                         MacLeod                                      3                                                       
+Joseph                         Ullman                                       8                                                       
+Marcia                         Longley                                      7                                                       
+Marcia                         Longley                                      8                                                       
+Marcia                         Longley                                      7                                                       
+Marie                          Curie                                       10                                                       
+Marvin                         Minsky                                       5                                                       
+Marvin                         Minsky                                       9                                                       
+Penelope                       Faure                                        7                                                       
+Penelope                       Faure                                        8                                                       
+Penelope                       Faure                                        7                                                       
+Penelope                       Faure                                        8                                                       
+Penelope                       Faure                                        7                                                       
+Peter                          Lee                                          8                                                       
+William                        Fences                                      10                                                       
+
+24 rows selected.
+
+SQL> 
+SQL> -- Question 6
+SQL> SELECT surname "Last",
+  2  firstname "First",
+  3  seniority_date "Seniority",
+  4  unit,
+  5  salary "Salary"
+  6  FROM faculty
+  7  WHERE (unit, salary) IN (SELECT unit,
+  8  								     MIN(salary)
+  9  								     FROM faculty
+ 10  								     GROUP BY unit
+ 11  								     HAVING unit IS NOT NULL)
+ 12  ORDER BY salary DESC;
+
+Last                           First                          Seniority       UNIT     Salary                                       
+------------------------------ ------------------------------ --------- ---------- ----------                                       
+Plane                          Robert                         01-AUG-97        130      50000                                       
+Lee                            Douglas                        01-SEP-93        300      48000                                       
+Faure                          Penelope                       10-AUG-14        140      47500                                       
+James                          Julie                          01-AUG-12        120      45500                                       
+Rodrigues                      Carlos                         01-JUL-13        110      45000                                       
+Boyce                          Elaine                         01-SEP-98        143      43200                                       
+Minsky                         Marvin                         15-AUG-10        310      42000                                       
+Lee                            Peter                          30-AUG-15        141      41500                                       
+Winch                          Graham                         01-APR-15        200      39000                                       
+Taylor                         Ted                            01-SEP-14        100      30000                                       
+
+10 rows selected.
+
+SQL> 
+SQL> -- Question 7
+SQL> COLUMN "Salary" FORMAT $99,999;
+SQL> 
+SQL> SELECT firstname "First Name",
+  2  surname "Last Name",
+  3  CASE WHEN unit IS NULL THEN 0
+  4  	  WHEN unit IS NOT NULL THEN unit
+  5  	      END "Unit",
+  6  salary "Salary"
+  7  FROM faculty
+  8  WHERE salary > (SELECT AVG(salary) FROM faculty)
+  9  ORDER BY salary DESC;
+
+First Name                     Last Name                            Unit   Salary                                                   
+------------------------------ ------------------------------ ---------- --------                                                   
+Clifford                       James                                   0  $52,000                                                   
+Georgette                      Jonas                                   0  $52,000                                                   
+Robert                         Plane                                 130  $50,000                                                   
+William                        Fences                                140  $50,000                                                   
+Edward                         MacLeod                               140  $49,700                                                   
+Michael                        Sienko                                100  $49,500                                                   
+Fadil                          Zuwaylif                              110  $49,200                                                   
+Marie                          Curie                                 100  $49,000                                                   
+Douglas                        Lee                                   300  $48,000                                                   
+Penelope                       Faure                                 140  $47,500                                                   
+Harry                          Hilbert                               110  $47,200                                                   
+Joseph                         Ullman                                100  $47,000                                                   
+Grace                          Hopper                                  0  $47,000                                                   
+David                          Reid                                  100  $46,900                                                   
+Marcia                         Longley                               110  $46,500                                                   
+
+15 rows selected.
+
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Create a file
+SQL> SPOOL OFF

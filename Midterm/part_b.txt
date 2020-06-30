@@ -1,0 +1,99 @@
+SQL> set linesize 80
+SQL> set pagesize 30
+SQL> 
+SQL> TTITLE CENTER 'Faculty - Expertise Level Report' SKIP 2;
+SQL> BTITLE CENTER FORMAT A10 'RUN BY: ' SQL.USER;
+SQL> 
+SQL> BREAK ON "Level" SKIP 1 ON REPORT;
+SQL> 
+SQL> COLUMN "Level" HEADING 'Expertise Level';
+SQL> COLUMN "id" HEADING 'Faculty ID';
+SQL> COLUMN "unit" HEADING 'Unit';
+SQL> COLUMN "fname" FORMAT A20 HEADING 'First Name';
+SQL> COLUMN "sname" FORMAT A20 HEADING 'Last Name';
+SQL> 
+SQL> COMPUTE COUNT LABEL 'Expertise Total' OF "sname" ON "Level";
+SQL> COMPUTE COUNT LABEL 'Grand Total' OF "sname" ON REPORT;
+SQL> 
+SQL> SELECT e.expertise_level "Level",
+  2  f.employee_id "id",
+  3  f.unit "unit",
+  4  f.firstname "fname",
+  5  f.surname "sname"
+  6  FROM faculty f,
+  7  (SELECT employee_id, expertise_level
+  8   FROM expertise
+  9   GROUP BY employee_id, expertise_level) e
+ 10  WHERE f.employee_id = e.employee_id
+ 11  AND expertise_level >= 7
+ 12  ORDER BY 1, 2, 3;
+
+                        Faculty - Expertise Level Report                        
+                                                                                
+Expertise Level Faculty I       Unit First Name           Last Name             
+--------------- --------- ---------- -------------------- --------------------  
+              7 000018012        110 Christopher          Sparks                
+                000130006        140 Penelope             Faure                 
+                000296257        110 Marcia               Longley               
+                002300123        300 Douglas              Lee                   
+                002300137        100 David                Reid                  
+***************                                           --------------------  
+Expertise Total                                                              5  
+                                                                                
+              8 000012345        100 Joseph               Ullman                
+                000012346        141 Peter                Lee                   
+                000018012        110 Christopher          Sparks                
+                000130006        140 Penelope             Faure                 
+                000296257        110 Marcia               Longley               
+***************                                           --------------------  
+Expertise Total                                                              5  
+                                                                                
+              9 000030002        310 Marvin               Minsky                
+***************                                           --------------------  
+Expertise Total                                                              1  
+                                                                                
+             10 000000001        100 Marie                Curie                 
+                000000006        140 William              Fences                
+***************                                           --------------------  
+Expertise Total                                                              2  
+                               RUN BY: CPRG250                                  
+
+                        Faculty - Expertise Level Report                        
+                                                                                
+Expertise Level Faculty I       Unit First Name           Last Name             
+--------------- --------- ---------- -------------------- --------------------  
+                                                                                
+                                                          --------------------  
+Grand Total                                                                 13  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               RUN BY: CPRG250                                  
+
+13 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> CLEAR COLUMN;
+SQL> 
+SQL> -- Create a file
+SQL> SPOOL OFF
